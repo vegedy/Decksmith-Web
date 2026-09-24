@@ -1,62 +1,36 @@
 # Decksmith Web
 
-## Source of truth
+## Source of truth and scope
 
-`docs/SPEC.md` is the authoritative product and architecture specification.
+- `docs/SPEC.md` is authoritative. Before implementation, read its relevant sections,
+  `PLAN.md`, and the existing implementation.
+- Implement only the current authorized milestone; add future work only when it is a
+  minimal prerequisite. Planning does not authorize starting Phase 1.
+- Never silently weaken or remove requirements. Record conflicts and interpretations
+  in `docs/DECISIONS.md`; document deviations from examples while preserving requirements.
+- Avoid speculative abstractions and features outside the specification.
 
-Before implementing a task:
-1. Read the relevant sections of `docs/SPEC.md`.
-2. Read `PLAN.md`.
-3. Inspect the existing implementation before changing it.
+## Engineering
 
-Do not silently weaken, reinterpret, or remove requirements from the specification.
+- Use Slidev, Vue 3, strict TypeScript, Markdown and Vite. Let Slidev own navigation,
+  slide state, click steps and export; do not build a custom presentation engine.
+- Prefer existing Slidev/Vue capabilities and simple solutions. Justify new dependencies.
+- Separate deck content/data/assets from reusable components, layouts and themes.
+- Components must be generic, documented and have typed props. Avoid `any` unless
+  technically unavoidable and documented.
+- Use semantic CSS tokens/layers; prefer SVG for exportable diagrams.
+- Keep runtime functionality, fonts and resources offline-capable without external services.
+- Give every interactive component a meaningful static/export state and defined reset/
+  slide-transition behavior. Respect `prefers-reduced-motion` from the outset.
+- Preserve text-based, Git-friendly sources and Linux development/build/export support.
 
-## Engineering rules
+## Validation and documentation
 
-- Keep the architecture based on Slidev, Vue 3, TypeScript, Markdown and Vite.
-- Prefer simple solutions and existing Slidev/Vue capabilities over custom framework code.
-- Do not build a custom slide engine.
-- Keep presentation content separate from reusable framework components.
-- Components must be generic and must not depend on one particular presentation.
-- Prefer SVG for diagrams and visualizations that must export cleanly.
-- Runtime presentation functionality must not depend on external services.
-- Fonts, assets and presentation resources must work offline.
-- Interactive components must provide a meaningful static/export state.
-- Respect `prefers-reduced-motion`.
-- Keep TypeScript strict and avoid `any` unless technically unavoidable and documented.
-- Do not add dependencies without a concrete justification.
-
-## Scope control
-
-Implement only the current milestone from `PLAN.md`.
-
-Do not implement future milestones opportunistically unless a minimal prerequisite is necessary for the current milestone.
-
-Avoid speculative abstractions.
-
-## Verification
-
-After every milestone, run all checks applicable to that milestone.
-
-At minimum maintain these commands:
-
-- `npm run dev`
-- `npm run build`
-- `npm run check`
-- `npm run export:pdf`
-
-When additional tests or validation commands exist, include them in `npm run check`.
-
-Never declare a milestone complete while its required validation is failing.
-
-## Documentation
-
-Keep these files current:
-
-- `README.md`: user-facing setup and usage
-- `PLAN.md`: milestone status and remaining work
-- `docs/DECISIONS.md`: non-trivial architecture decisions
-- `docs/REQUIREMENTS.md`: requirement-to-implementation traceability
-
-When an implementation decision differs from an example in `docs/SPEC.md`, document why while preserving the actual requirement.
-
+- From Phase 1, maintain `npm run dev`, `npm run build`, `npm run check` and
+  `npm run export:pdf`.
+- Run all applicable milestone checks. Include type checking, linting, formatting,
+  production build and additional automated validations/tests in `npm run check`.
+- Inspect visual/export results as well as command outcomes. Never mark a milestone
+  complete with failing required validation or a requirement implemented without evidence.
+- Keep `README.md` (setup/usage), `PLAN.md` (status/remaining work),
+  `docs/DECISIONS.md` (interpretations) and `docs/REQUIREMENTS.md` (traceability) current.
