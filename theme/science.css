@@ -122,6 +122,11 @@
   .figure-dialog::backdrop {
     background: #0009;
   }
+  .deck-frame {
+    --slidev-code-font-size: var(--text-sm);
+    --slidev-code-line-height: 1.5;
+    --slidev-code-background: var(--color-surface);
+  }
   .scientific-code {
     margin: var(--space-2) 0;
   }
@@ -142,7 +147,6 @@
     color: var(--color-text-muted);
   }
   .scientific-code .code-focused {
-    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
     border-left: 3px solid var(--color-accent);
   }
 }
@@ -166,4 +170,9 @@
       break-inside: avoid;
     }
   }
+}
+
+/* Shiki's upstream colors are unlayered. Monochrome output retains token emphasis. */
+html[data-theme='minimal-print'] .deck-frame .shiki span {
+  color: var(--color-text) !important;
 }

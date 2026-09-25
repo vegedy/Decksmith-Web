@@ -154,3 +154,109 @@ The QR was checked as an SVG with a quiet zone and visible URL; no physical came
 scan was performed. General accessibility/theme/aspect-ratio review, packaging and
 starter workflows remain Phase 4 scope. Tests validate this bundled showcase; authors
 must inspect new dense datasets and coordinate-based diagrams for their own layouts.
+
+## Phase 4 — Maturity and final audit (2026-09-25)
+
+**Result: complete.** All 87 requirements have implementation and validation evidence
+in `REQUIREMENTS.md`; every required K-component has a typed API and editable example
+in `COMPONENTS.md`. No mandatory requirement is waived. The six real theme/layout
+builds and independent generated-presentation checks passed after the issues below
+were fixed. No runtime dependency was added in this phase.
+
+### Commands and results
+
+- `npm install`: successful in the repository and a fresh generated directory using
+  Node 26.10.0 on Linux. The existing lockfile is unchanged. Chromium was already
+  installed locally; the documented explicit browser-install fallback remains valid.
+- `npm run dev` plus `SMOKE_URL=http://localhost:3030 npm run test:foundation`:
+  both main and appendix start and render; all 29 main slides, native links, local
+  fonts and assets pass with external requests blocked. Servers were stopped afterward.
+- `npm run check`: **exit 0**, as did the complete check in the independently installed
+  generated deck. Includes strict Vue/TypeScript, ESLint, Prettier, **17 passing unit
+  tests**, resource scanning, production main/appendix builds, scientific validators,
+  browser smoke, interactions, PDF regression, accessibility, packaging and six-theme
+  validation. No browser warnings, errors, failed resources or external requests.
+- `npm run export:pdf` / `test:pdf`: **30 pages** (29 main + one appendix), selectable
+  scientific content, embedded Inter and KaTeX, complete bibliography and SVG diagrams.
+  Formula steps/reveals are final; comparison panels show both images; controls omitted.
+- `npm run export:png -- --slide 1`: one image. `npm run export:png`: **30 images**.
+  Manifests record slide numbering and final-state behavior. The packaging regression
+  exercises both paths and checks the file counts. A fresh directory prevents stale pages.
+- `npm run export:emergency -- --images`: fresh website, appendix, configured PDF,
+  instructions and all PNGs. Packaged website passed the full offline smoke separately.
+  `npm run export:emergency` without images also passed in the isolated variant fixture.
+- Main-only, click-step PDF variant: **40 pages**, with `includeAppendix: false` and
+  `renderFinalAnimationState: false`. Speaker-notes export with `includeNotes: true`
+  produced the notes PDF; adding an actual comment note and extracting PDF text verified
+  “Acceptance speaker note: explain the central scientific question.” The no-image
+  emergency variant also included its notes companion.
+- `npm run new:deck -- --name acceptance-deck`: created the default destination under
+  `output/decks/`. `--output /tmp/decksmith-phase4-release` was independently installed,
+  edited and fully checked. Existing destinations are rejected; no shared source files
+  or dependencies are required by generated presentations.
+
+### Six themes/layouts and accessibility
+
+`test:themes` creates an isolated working copy, copies local installed dependencies
+without Vite caches (preserving relative executable symlinks), then configures and
+builds each combination. It runs offline browser smoke, accessibility, print bounds
+and fresh PDF regression for **academic-light, academic-dark, minimal-print × 16:9, 4:3**.
+Each output contains all 30 PDF pages with the expected fonts. All native print routes
+pass footer/right-edge bounds. Browser views at 1440×900 and 390×844 retain the native
+Slidev composition. Evidence: `output/themes/<theme>-<ratio>/showcase.pdf` and `smoke/`.
+
+Every normal/semantic text token is tested at >=4.5:1 against canvas and surface.
+Rendered Shiki tokens also pass >=4.5:1 and >=18px. Controls have accessible names,
+visible outlines and programmatic keyboard focus; Enter activates buttons/details;
+the existing interaction suite tests arrow-key slider changes, reset and re-entry.
+Figure Escape dismissal, live/print alternatives, image descriptions, reduced-motion
+and complete reveal/comparison print states pass. Agenda progress is text-labeled;
+charts, metrics and matrix cells carry labels/values independently of color.
+These tests implement the documented acceptance criteria; they are not a general
+WCAG certification or a physical projector measurement.
+
+Visual review used Poppler-rendered PDF pages, browser screenshots and full-deck
+contact sheets. All 30 pages of the light and dark 16:9 decks and minimal-print 4:3
+were reviewed, with additional chart views in the other three combinations and
+full-size code slides in light/dark. Text, math, source footers, tables, chart labels,
+QR quiet zone, static comparisons and closing/appendix layouts are readable and fit.
+4:3 deliberately adds vertical breathing room rather than stretching the graphics.
+Contact sheets and detailed views are in `output/review/`; no clipped/overlapping
+content or interactive chrome was observed. The previously small code was corrected
+and its latest export re-inspected.
+
+### Fresh presentation walkthrough
+
+The final walkthrough ran from approximately **11:32–11:36 UTC**, after framework
+fixes, in `/tmp/decksmith-phase4-release`:
+
+1. Generate `acceptance-deck`; run a fresh `npm install` with the lockfile.
+2. Change title/export name, author, subtitle and footer in `deck.config.ts`.
+3. Edit the agenda Markdown into a scientific question with inline `p = 1/2` math,
+   `<Cite id="shannon1948" />`, a labeled three-step `PipelineDiagram`, and a Takeaway.
+4. Run `npm run dev` and the development browser smoke, including appendix navigation.
+5. Run the complete `npm run check`: static builds, all PDF/PNG/emergency paths,
+   all six theme/ratio builds and the scientific/interactive checks pass.
+6. Compare every file under components/layouts/setup/theme/lib/composables/scripts/types
+   to the source repository: **identical**. Only configuration and Markdown were edited.
+
+This supports the approximately 30-minute template success criterion for an existing
+story and installed/cached toolchain. Network installation time and writing an original
+scientific talk are not asserted to fit that time. The generated deck retains editable
+examples and can be reduced/reordered through its Markdown import manifest.
+
+### Defects found and fixed during acceptance
+
+- Upstream unlayered GitHub-alert colors overrode the semantic warning token; their
+  color CSS now enters the existing low-priority reset layer.
+- Native Slidev code styling forced 12px text. The shared frame now binds native code
+  variables to 18px and 1.5 line height; high-contrast Shiki palettes replace low-contrast
+  token colors. Minimal-print uses monochrome code and focus keeps a visible border.
+- The theme fixture initially retained absolute executable symlinks/cached source paths;
+  dependency copying now preserves relative symlinks and omits caches. Final matrix
+  exports have no Vite allow-list/font errors. Embedded-font checks were strengthened.
+
+The existing npm audit reports 13 upstream findings (2 low, 1 moderate, 10 high),
+as in prior-phase dependency review. No unrelated dependency migration was made.
+Optional speaker-note generation uses Slidev's bundled Chromium path as documented.
+The website requires a minimal HTTP server (ES modules); the PDF opens directly offline.

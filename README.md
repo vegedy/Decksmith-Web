@@ -1,8 +1,8 @@
 # Decksmith Web
 
-A local Slidev template for technical talks. Phases 1–3 provide Markdown content,
-Vue 3 layouts, strict TypeScript, scientific components, central citations, a light
-theme, reusable visualizations, controlled interaction, static hosting and PDF export.
+A local Slidev framework for technical talks: Markdown, Vue 3, strict TypeScript,
+scientific components, central citations, three themes, reusable visualizations,
+controlled interaction, offline hosting, PDF and PNG export, and emergency packaging.
 
 ## Start on Linux
 
@@ -62,7 +62,11 @@ Hash routing and relative build URLs support a hosting subdirectory. Opening
 
 ## Make a new talk
 
-1. Copy/fork this repository, excluding `node_modules`, `dist` and `output`.
+1. Run `npm run new:deck -- --name seminar-ml` and enter `output/decks/seminar-ml`.
+   Run `npm install` there. Alternatively copy/fork the repository excluding
+   `node_modules`, `dist` and `output`. The CLI accepts `--output /path/to/new-directory`
+   and refuses to overwrite an existing directory. It copies the full editable showcase,
+   framework, lockfile and documentation; it does not share dependencies or source files.
 2. Edit `deck.config.ts`: title, subtitle, author, institution, date, language, appearance and export name.
 3. Edit `slides.md` (first/title slide and main import order), `slides/*.md`, and `appendix.md`.
 4. Put local images in `public/images/`, then run `npm run check` and `npm run export:pdf`.
@@ -74,15 +78,16 @@ as the first slide, and keep content within the slide's available space.
 
 Content belongs in `slides/` and `public/`; generic code belongs in `components/`,
 `layouts/`, `setup/` and `theme/`. `scripts/` contains build/export validation support.
-`docs/SPEC.md` remains authoritative; `PLAN.md` and `docs/REQUIREMENTS.md` track later work.
+`docs/SPEC.md` remains authoritative; `PLAN.md` and `docs/REQUIREMENTS.md` track implementation evidence.
 
 ## Configuration and metadata
 
 `types/deck.ts` documents the central contract. `setup/preparser.ts` maps the
 `decksmith: true` entry marker to native Slidev headmatter. `setup/main.ts` maps central
 colors and font families to semantic CSS variables. Avoid duplicating central settings
-in slide frontmatter. Only `academic-light` is implemented; the type deliberately does
-not advertise future themes. `16:9` is the default; `4:3` selects Slidev's taller canvas.
+in slide frontmatter. `defaultTheme` selects `academic-light`, `academic-dark`, or `minimal-print`.
+Omit `display.colors` to use the chosen palette; an optional full color map overrides it.
+Palette changes need no component edits. Custom colors must pass the contrast check. `16:9` is the default; `4:3` selects Slidev's taller canvas.
 
 Footers, slide numbers and progress are independently controlled by configuration.
 `showSourceFooters` controls source rows; `citations` selects the default citation
@@ -109,9 +114,13 @@ row automatically; other custom metadata does not select content variants. See [
 | `DeckFrame`                   | Shared content frame, footer and progress from native Slidev context; default slot                                                                             |
 | `DeckLink`                    | Required `target`: `main` or `appendix`; default slot supplies link text; links become plain text in PDF                                                       |
 
-Agenda content is ordinary Markdown. Every foundation component is stateless: navigation
+`Agenda` accepts `items: { title: string; description?: string }[]`, optional
+one-based `current = 1` and `label = "Agenda"`. It marks the current item with
+`aria-current="step"` and visible Current/Completed text. `QuestionSlide` accepts
+optional `question = "Questions?"`, `prompt`, and a default slot. See slides 2 and 29.
+Both components use semantic HTML and remain fully visible in export. Every foundation component is stateless: navigation
 and re-entry cannot retain component interaction state. The same content renders in PDF.
-There is no custom navigation engine or animation library.
+Slidev continues to own navigation and click state.
 
 Appendix slides form a separate Slidev entry. They never appear in the main talk's
 linear navigation, but `DeckLink` opens them and returns to the main title slide.
@@ -286,3 +295,76 @@ static fallbacks. `npm run test:smoke` checks the built main/appendix deck offli
 browser printing; `npm run test:interaction` checks clicks, reset, keyboard comparison,
 slide re-entry, reduced motion and print final states. Both are in `npm run check`.
 `npm run test:foundation` remains a compatible alias for the general smoke check.
+
+## Phase 4 export and reuse workflow
+
+```sh
+npm run export:png -- --slide 1
+npm run export:png
+npm run export:emergency
+npm run export:emergency -- --images
+```
+
+PNG numbering is one-based in main-then-appendix order, following `includeAppendix`.
+An invalid slide fails before exporting. PNGs always use Slidev's final print state,
+including both complete comparison images; they are not snapshots of a live click step.
+PDF uses `renderFinalAnimationState` (true by default); false requests native click pages.
+Native export arguments such as `--range 1-3` can also be passed to `export:pdf`.
+
+Images go into a new `output/png-*/slides/` directory with a manifest;
+`output/latest-png.json` records the latest directory. Emergency output goes into a
+new `output/emergency-*/`, recorded by `output/latest-emergency.json`. Unique directories
+prevent stale pages after a deck becomes shorter. Each emergency package contains:
+
+- `site/`, the complete static main and appendix website, fonts, assets and licenses;
+- the configured PDF, and a notes PDF if notes export is enabled;
+- `README.txt` with offline presentation instructions;
+- optionally `images/` with PNGs and a slide manifest (`--images`).
+
+Copy the whole emergency directory to the presentation machine. Open the PDF directly,
+or run `python3 -m http.server 8080 --directory site` inside the package for the website.
+Node, npm and internet are unnecessary on that machine. Python is just one possible
+static server. Keep the PDF available if no HTTP server is installed.
+
+## Complete showcase and accessibility
+
+`slides.md` plus `appendix.md` demonstrate all 27 required K-components;
+[the component index](docs/COMPONENTS.md) maps each requirement to its editable example. The component
+API tables above are the usage reference; `types/visualization.ts` and `types/science.ts`
+define nested data. The 29-slide main deck ends with a discussion prompt; the appendix
+remains outside linear navigation. Add, remove or reorder imports to make your talk.
+The framework tests derive counts from the deck rather than assuming the showcase length.
+
+All three themes share the 980px grid: 24px body, 38px headings, 18px secondary labels,
+14px footers. Text tokens meet 4.5:1 on canvas and surface; focus uses a 3px outline.
+Charts use labels/values, line patterns and point sizes as well as color; callouts,
+agenda progress, metrics and matrix cells carry visible text. `minimal-print` uses
+white paper and a monochrome palette. Both aspect ratios use identical horizontal
+spacing; 4:3 adds vertical space. Slidev scales the canvas for narrow screens.
+This preserves the composition; portrait-phone reading is best in landscape or zoomed.
+
+Keyboard users can Tab to buttons, links, slider and chart details; Enter activates
+buttons/details, arrows adjust the focused slider, and Escape closes a figure zoom.
+Glossary definitions stay visible without hovering. Motion respects the operating
+system preference; content is still revealed through native Slidev clicks. Print
+always exposes the relevant content and removes controls. Print preserves the selected
+theme; select `minimal-print` for low-ink output.
+
+`npm run validate:resources` rejects literal remote image/script/font/CSS/fetch
+resources in runtime sources and public files. It also runs in the build hook.
+Citation and QR destination links are allowed. Computed runtime URLs cannot all be
+statically proven: browser smoke tests independently block external requests and
+reject missing assets, console errors and failed responses on every slide.
+
+`npm run check` includes `test:accessibility`, `test:packaging` and `test:themes` in
+addition to all earlier checks. The theme test makes an isolated copy with local
+installed dependencies, builds all six theme/ratio combinations, runs offline and
+keyboard/contrast checks, and verifies every PDF. Evidence is in `output/themes/`.
+Packaging tests exercise single/series PNG export, starter non-overwrite, and an
+emergency website with network blocked. Expect the complete suite to take several
+minutes; `typecheck`, `lint` and `test` are available for quicker iterations.
+
+A practical first-talk sequence is: create the deck, change central metadata, edit
+Markdown, include `$p=1/2$`, `<Cite id="shannon1948" />` and a labeled
+`PipelineDiagram`, then build and export. Replace the sample bibliography and images
+with your own evidence. Run the full checks and inspect the PDF before presenting.

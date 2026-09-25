@@ -11,7 +11,8 @@ export function slidevConfig(config: DeckConfig = deck) {
     lang: config.meta.language,
     aspectRatio: config.display.aspectRatio === '16:9' ? 16 / 9 : 4 / 3,
     canvasWidth: 980,
-    colorSchema: 'light',
+    colorSchema:
+      config.display.defaultTheme === 'academic-dark' ? 'dark' : 'light',
     routerMode: 'hash',
     fonts: {
       sans: config.display.fonts.sans,

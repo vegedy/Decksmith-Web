@@ -5,9 +5,7 @@ chapter: Closing
 routeAlias: closing
 ---
 
-# Ready for your next talk
-
-Fork the template, replace the metadata, and write your first chapter.
+<QuestionSlide question="What will you explain next?" prompt="Discussion · Questions · Reflection" />
 
 <DeckLink target="appendix">Open the optional appendix</DeckLink>
 

@@ -51,7 +51,7 @@ consistent with the resolved appendix/export policy.
 
 ## DEC-05 — Visual acceptance thresholds and optional aspect ratio
 
-**Status:** Baseline established below; complete the broader review in Phase 4.
+**Status:** Resolved in Phase 4; criteria and evidence below.
 **Affected:** D-05–D-08, IA-04.
 
 “High contrast”, projector readability and usable narrow views have no numeric thresholds
@@ -89,7 +89,7 @@ sessions. This is a deliberate deviation from a single-entry example, preserving
 
 ### DEC-05 baseline — readable fixed canvas
 
-**Status:** Baseline established; full Phase 4 review remains open. Use a 980px-wide
+**Status:** Baseline retained and extended in Phase 4. Use a 980px-wide
 Slidev canvas: 24px body text, 38px content headings, 60px title/section headings,
 18px secondary labels and 14px footers. Normal and muted text target at least 4.5:1
 contrast on the light canvas; primary headings exceed that baseline. Meaningful links
@@ -230,3 +230,53 @@ route for a complete static state. Live screenshots naturally capture the curren
 ImageCompare extends the existing build-time literal asset validation to both image
 paths and requires descriptive alt strings and a caption in Markdown. Public-root
 paths are consistent with Figure. Source data remains text and the new artwork is SVG.
+
+## Phase 4 resolutions (2026-09-25)
+
+### DEC-12 — theme and accessibility maturity
+
+All three palettes are selected by central `defaultTheme`; `display.colors` is now
+optional so selecting dark does not retain light overrides. Existing full override
+objects still work. Local fonts and the existing grid are unchanged. The optional
+4:3 canvas is supported at the same 980px width with greater height; no content is
+silently shrunk to fit. Normal/semantic text colors target >=4.5:1 on both surfaces;
+body/secondary/footer sizes retain DEC-05. Narrow screens use native Slidev scaling.
+Browser checks verify names, focus outlines, native keyboard activation, descriptions,
+all final layouts, local fonts and reduced motion. These are concrete acceptance
+criteria, not a claim of comprehensive WCAG certification or physical projector testing.
+
+GitHub-alert color CSS used an unlayered `--color-warning` that overrode the palette.
+The Vite layer adapter now places those upstream color styles alongside the reset in
+the low-priority layer; all theme palettes retain their semantic tokens. Print preserves
+the chosen theme. `minimal-print` explicitly supplies white paper/monochrome ink.
+
+### DEC-13 — exports and emergency package
+
+PNG uses native Slidev export, always at the final animation state, with a one-based
+single-slide selector or whole series. PDF retains its configurable native click export.
+The emergency package rebuilds the static site and PDF, optionally exports all PNGs,
+and copies the deployable files and instructions into a fresh directory. This directory
+is the package (no archive dependency); it includes local licenses/fonts. A PDF viewer
+works without JavaScript; the site uses a minimal HTTP server as allowed by E-04.
+Unique output directories avoid stale images or partial overwrites of earlier packages.
+
+### DEC-14 — reuse and final catalog
+
+The starter CLI copies the full working showcase as editable examples with renamed
+metadata/package identity; authoring only requires configuration, Markdown, bibliography
+and assets. Destination overwrite is an error. No editor/backend or additional runtime
+dependency is introduced. Agenda/QuestionSlide are stateless typed components. Existing
+GlossaryTerm and QrLink retain their always-readable definitions/destinations.
+
+The specification's `PipelineDiagram :nodes` string-array/`animated` example is
+illustrative: the established API is `label` plus typed `steps` with IDs, labels and
+optional details, while ProcessSteps/InteractiveReveal provide native-click sequencing.
+This preserves process visualization and animation requirements without a second API.
+The source scanner checks literal runtime dependencies; hyperlinks remain allowed.
+Dynamically computed dependencies are covered by blocked-network browser checks.
+
+The final visual review also found that Slidev's default code size was 12px despite
+the surrounding secondary text tokens. The shared frame now binds native code size
+to 18px and its line height to 1.5. Shiki uses bundled GitHub high-contrast light/dark
+palettes; rendered token contrast and size are tested, and minimal-print renders
+monochrome code. Line focus retains its explicit border without a contrast-reducing tint.

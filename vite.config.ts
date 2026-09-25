@@ -11,7 +11,10 @@ export default defineConfig({
       enforce: 'pre',
       transform(code, id) {
         // Slidev imports this reset unlayered; put it below our semantic layers.
-        if (id.endsWith('/@unocss/reset/tailwind.css'))
+        if (
+          id.endsWith('/@unocss/reset/tailwind.css') ||
+          /markdown-it-github-alerts\/styles\/github-colors-.*\.css$/.test(id)
+        )
           return { code: `@layer reset { ${code} }`, map: null }
       },
     },

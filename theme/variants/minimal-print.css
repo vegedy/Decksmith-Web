@@ -1,0 +1,16 @@
+@layer theme {
+  :root[data-theme='minimal-print'] {
+    --color-canvas: #ffffff;
+    --color-surface: #ffffff;
+    --color-text: #111111;
+    --color-text-muted: #444444;
+    --color-primary: #222222;
+    --color-accent: #333333;
+    --color-warning: #444444;
+    --color-danger: #222222;
+    --chart-secondary: #555555;
+    --chart-tertiary: #333333;
+    --radius: 0px;
+    color-scheme: light;
+  }
+}

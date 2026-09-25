@@ -17,6 +17,7 @@ const text = execFileSync('pdftotext', ['-layout', file, '-'], {
   encoding: 'utf8',
 })
 const fonts = execFileSync('pdffonts', [file], { encoding: 'utf8' })
+assert.match(fonts, /Inter/, 'Local presentation font missing from PDF')
 const entry = deck.export.includeAppendix ? '.export.md' : 'slides.md'
 const data = await load(
   { roots: [resolve('.')], userRoot: resolve('.') },

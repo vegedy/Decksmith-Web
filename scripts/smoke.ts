@@ -6,10 +6,11 @@ import { extname, resolve, sep } from 'node:path'
 import { chromium } from 'playwright-chromium'
 import { load } from '@slidev/parser/fs'
 import deck from '../deck.config.ts'
+import { verifyAccessibility } from './accessibility.ts'
 import { verifyInteraction } from './interaction.ts'
 import { chromiumPath } from './browser.ts'
 
-const root = resolve('dist')
+const root = resolve(process.env.SMOKE_ROOT ?? 'dist')
 const mime: Record<string, string> = {
   '.html': 'text/html',
   '.js': 'text/javascript',
@@ -74,7 +75,9 @@ try {
     resolve('slides.md'),
   )
   const total = data.slides.length
-  if (process.argv.includes('--interaction-only')) {
+  if (process.argv.includes('--accessibility-only')) {
+    await verifyAccessibility(page, origin, total)
+  } else if (process.argv.includes('--interaction-only')) {
     await verifyInteraction(page, origin, data.slides)
   } else {
     for (let i = 0; i < total; i++) {

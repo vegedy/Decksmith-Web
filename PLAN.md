@@ -1,7 +1,6 @@
 # Implementation plan
 
-`docs/SPEC.md` is authoritative. **Phases 1–3 are implemented and verified**; Phase 4 and the final audit
-are not started. Validation evidence is in `docs/VALIDATION.md`.
+`docs/SPEC.md` is authoritative. **Phases 1–4 and the final requirements audit are complete and verified** (2026-09-25). Validation evidence is in `docs/VALIDATION.md`.
 The repository began with documentation only.
 
 ## Planned architecture and boundaries
@@ -24,8 +23,7 @@ the starter CLI and showcase, are tracked below without inventing new requiremen
 ## Validation contract
 
 The Phase 1 commands `npm run dev`, `npm run build`, `npm run check` and
-`npm run export:pdf` are implemented and verified. Commands introduced by later phases
-remain planned interfaces.
+`npm run export:pdf` are implemented and verified. All export, starter and validation commands described below are implemented.
 `npm run check` must run strict type checking, ESLint, formatting checks and the production
 build, plus every additional automated validation/test introduced in later phases.
 Avoid recursive script wiring. Each phase runs the four baseline commands on Linux;
@@ -161,13 +159,19 @@ example and documented typed props; the complete smoke deck builds and exports.
 
 ## Phase 4 — Maturity
 
-**Status:** Not started. **Depends on:** Phase 3.
+**Status:** Complete (2026-09-25). **Depends on:** Phase 3.
+
+**Evidence:** `docs/VALIDATION.md` (Phase 4), `docs/COMPONENTS.md`,
+`theme/variants/`, `scripts/accessibility.ts`, `scripts/test-themes.ts`,
+`scripts/export-png.ts`, `scripts/export-emergency.ts`, `scripts/new-deck.ts`.
+All six theme/ratio builds and PDFs pass; the clean generated-deck walkthrough
+passes the complete suite without framework edits. DEC-12–14 record final choices.
 
 **Scope:** Complete the component catalog, theme suite, packaging, accessibility and
 reuse workflow. No editor, backend, accounts or cloud features.
 
 **Affected IDs:** A-01–A-07; I-04–I-07; K-01–K-27 (catalog review), with
-K-19, K-21–K-23 newly delivered; D-01–D-10; IA-04–IA-06; E-01–E-10.
+K-22–K-23 newly delivered and K-19/K-21 reviewed; D-01–D-10; IA-04–IA-06; E-01–E-10.
 
 **Deliverables:**
 
@@ -197,7 +201,13 @@ supports the specification's approximately 30-minute new-talk success criterion.
 
 ## Final requirements audit
 
-**Status:** Not started. **Depends on:** Phases 1–4.
+**Status:** Complete (2026-09-25). **Depends on:** Phases 1–4.
+
+**Evidence:** All 87 rows in `docs/REQUIREMENTS.md` link to concrete implementation
+and validation. `docs/VALIDATION.md` records the fresh Linux install, full quality
+suites in both source and generated repositories, offline emergency package, PDF/PNG
+and notes/click-state variants, visual inspection and content-only authoring walkthrough.
+No remaining mandatory implementation work; no unrelated features added.
 
 **Scope:** Audit every numbered requirement and the unnumbered architecture, data
 contracts, phase deliverables, non-goals and success criteria. This is verification and

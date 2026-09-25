@@ -17,16 +17,6 @@ export default {
     showSourceFooters: true,
     defaultTheme: 'academic-light',
     footer: 'Decksmith Web · Foundation',
-    colors: {
-      canvas: '#f8fafc',
-      surface: '#ffffff',
-      text: '#172b3a',
-      muted: '#526575',
-      primary: '#174e7a',
-      accent: '#12665a',
-      warning: '#805200',
-      danger: '#a12435',
-    },
     fonts: {
       sans: 'Inter Variable',
       mono: 'JetBrains Mono',
@@ -40,4 +30,4 @@ export default {
     includeNotes: false,
   },
   citations: { style: 'author-year', bibliographyFile: 'data/references.yaml' },
-} satisfies DeckConfig
+} as DeckConfig

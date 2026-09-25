@@ -10,3 +10,6 @@
 @import './theme/science.css';
 @import './theme/visualization.css';
 @import './theme/motion.css';
+
+@import './theme/variants/academic-dark.css';
+@import './theme/variants/minimal-print.css';

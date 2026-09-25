@@ -1,0 +1,15 @@
+@layer theme {
+  :root[data-theme='academic-dark'] {
+    --color-canvas: #101c28;
+    --color-surface: #1b2c3c;
+    --color-text: #f1f5f9;
+    --color-text-muted: #becbd7;
+    --color-primary: #9bd2ff;
+    --color-accent: #80dec6;
+    --color-warning: #ffce80;
+    --color-danger: #ffa8b7;
+    --chart-secondary: #ffbc98;
+    --chart-tertiary: #9ae0b1;
+    color-scheme: dark;
+  }
+}

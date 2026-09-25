@@ -7,8 +7,10 @@ timeBudget: 45
 
 # A small, dependable foundation
 
-1. Write the story in Markdown.
-2. Reuse layouts and typed Vue components.
-3. Present locally. Share the static site or PDF.
+<Agenda :items="[
+  { title: 'Write the story', description: 'Markdown and scientific sources' },
+  { title: 'Explain the evidence', description: 'Typed components and visualizations' },
+  { title: 'Share the result', description: 'Offline website, PDF and images' },
+]" :current="1" />
 
 > One source, with room to grow.

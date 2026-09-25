@@ -1,9 +1,11 @@
 import { defineVitePluginsSetup } from '@slidev/types'
+import { scanResources } from '../scripts/resources.ts'
 import { scientificManifest } from '../scripts/science.ts'
 export default defineVitePluginsSetup(() => [
   {
     name: 'decksmith-science',
     async buildStart() {
+      scanResources()
       await scientificManifest()
     },
     resolveId(id) {

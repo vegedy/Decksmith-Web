@@ -13,9 +13,9 @@ export interface DeckConfig {
     showProgress: boolean
     showSlideNumbers: boolean
     showSourceFooters: boolean
-    defaultTheme: 'academic-light'
+    defaultTheme: 'academic-light' | 'academic-dark' | 'minimal-print'
     footer: string
-    colors: {
+    colors?: {
       canvas: string
       surface: string
       text: string
