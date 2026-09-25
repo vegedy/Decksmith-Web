@@ -424,3 +424,7 @@ The suite tests rendered components in the real Slidev browser rather than a sep
 component-mounting test framework. Showcase-specific interaction/PDF assertions are
 conditional on the examples being present; removing examples reduces that coverage.
 Author-specific interactive components require their own checks and visual review.
+
+## License
+
+Decksmith Web is licensed under the [MIT License](LICENSE).
