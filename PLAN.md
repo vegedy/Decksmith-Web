@@ -1,6 +1,6 @@
 # Implementation plan
 
-`docs/SPEC.md` is authoritative. **Phases 1–4 and the final requirements audit are complete and verified** (2026-09-25). Validation evidence is in `docs/VALIDATION.md`.
+`docs/SPEC.md` is authoritative. **Phases 1–4 have historical passing validation; the independent final audit leaves D-05 physical projector verification open** (2026-09-25). Validation evidence is in `docs/VALIDATION.md`.
 The repository began with documentation only.
 
 ## Planned architecture and boundaries
@@ -201,13 +201,15 @@ supports the specification's approximately 30-minute new-talk success criterion.
 
 ## Final requirements audit
 
-**Status:** Complete (2026-09-25). **Depends on:** Phases 1–4.
+**Status:** Audit performed (2026-09-25); project acceptance remains open for D-05. **Depends on:** Phases 1–4.
 
 **Evidence:** All 87 rows in `docs/REQUIREMENTS.md` link to concrete implementation
 and validation. `docs/VALIDATION.md` records the fresh Linux install, full quality
 suites in both source and generated repositories, offline emergency package, PDF/PNG
 and notes/click-state variants, visual inspection and content-only authoring walkthrough.
-No remaining mandatory implementation work; no unrelated features added.
+The independent audit supersedes the earlier blanket verification claim: 86 requirements
+verified, D-05 not verifiable in this environment. No missing implementation was found;
+actual projector readability still needs evidence. See the final section of `docs/VALIDATION.md`.
 
 **Scope:** Audit every numbered requirement and the unnumbered architecture, data
 contracts, phase deliverables, non-goals and success criteria. This is verification and
@@ -231,3 +233,14 @@ planning. All required checks pass on Linux. Visual inspection confirms text, ma
 fonts, graphics, sources and final states in all outputs. The offline artifact and
 emergency package work without external services. No unresolved conflict undermines
 conformance. README, plan, decisions and traceability match the delivered repository.
+
+## Remaining acceptance work
+
+- D-05: inspect the default deck on a physical projector at the intended room lighting
+  and audience distance, including secondary labels, math, code and source footers.
+  Record the setup and findings in `docs/VALIDATION.md`; repair any demonstrated
+  readability defects before classifying the requirement as verified. Browser contrast
+  and PDF review are supporting evidence, not a physical test.
+- Minimum Node 22.12, camera QR scanning and arbitrary author content are outside this
+  run's evidence. These limitations do not erase the successful Linux/Node 26 showcase
+  checks, but must not be described as independently tested.

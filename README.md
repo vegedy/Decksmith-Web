@@ -93,7 +93,7 @@ Footers, slide numbers and progress are independently controlled by configuratio
 `showSourceFooters` controls source rows; `citations` selects the default citation
 style and the central YAML bibliography file.
 `renderFinalAnimationState` maps to Slidev's single-page export versus click-step export;
-no custom animations are introduced. `includeNotes: true` additionally produces a
+Slidev owns click state while reusable motion components provide effects. `includeNotes: true` additionally produces a
 `-notes.pdf` companion using Slidev's notes exporter. Static builds exclude speaker notes.
 
 Per-slide frontmatter supports `title`, `layout`, `chapter`, `citations`, `tags`,
@@ -368,3 +368,59 @@ A practical first-talk sequence is: create the deck, change central metadata, ed
 Markdown, include `$p=1/2$`, `<Cite id="shannon1948" />` and a labeled
 `PipelineDiagram`, then build and export. Replace the sample bibliography and images
 with your own evidence. Run the full checks and inspect the PDF before presenting.
+
+## Adding a slide and navigating the repository
+
+Create `slides/my-result.md` with slide frontmatter and content:
+
+```md
+---
+layout: default
+title: My result
+chapter: Results
+citations: [shannon1948]
+tags: [example]
+timeBudget: 60
+variant: main
+---
+
+# My result
+
+Explain the evidence with inline math $p = 1/2$.
+
+<Takeaway>State the conclusion supported by the evidence.</Takeaway>
+```
+
+Append its import to `slides.md` in presentation order:
+
+```md
+---
+src: ./slides/my-result.md
+---
+```
+
+Use a real key from your bibliography; replace the example citation with an appropriate
+source. For backup content, add the import to `appendix.md` instead. Preserve the
+`decksmith: true` marker on each entry so central configuration is applied. Run
+`npm run check`, export, and inspect the rendered slide after editing.
+
+| Directory / file                      | Purpose                                                           |
+| :------------------------------------ | :---------------------------------------------------------------- |
+| `deck.config.ts`                      | Talk identity, appearance, fonts, citations and export settings   |
+| `slides.md`, `appendix.md`, `slides/` | Entry order and editable Markdown content                         |
+| `data/`, `public/`                    | Bibliography and local images/licenses/assets                     |
+| `components/`, `layouts/`             | Generic typed Vue components and slide composition                |
+| `theme/`, `style.css`                 | Shared tokens, themes, print/motion rules and local font imports  |
+| `setup/`, `vite.config.ts`            | Native Slidev/Vite integration and content validation             |
+| `types/`, `lib/`, `composables/`      | Data contracts, reusable helpers and local UI lifecycle           |
+| `scripts/`, `tests/`                  | Build/export commands, browser checks and unit fixtures           |
+| `docs/`, `PLAN.md`                    | Specification, component index, decisions and acceptance evidence |
+| `dist/`, `output/`                    | Ignored generated websites, exports and inspection artifacts      |
+
+The independent audit verifies 86 of 87 requirements; **D-05 physical projector
+readability remains unverified**. See [the matrix](docs/REQUIREMENTS.md) and
+[validation evidence](docs/VALIDATION.md#independent-final-audit-2026-09-25).
+The suite tests rendered components in the real Slidev browser rather than a separate
+component-mounting test framework. Showcase-specific interaction/PDF assertions are
+conditional on the examples being present; removing examples reduces that coverage.
+Author-specific interactive components require their own checks and visual review.

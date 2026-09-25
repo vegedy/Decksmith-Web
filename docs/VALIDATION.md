@@ -1,3 +1,8 @@
+# Validation record
+
+The independent final audit at the end of this file supersedes earlier blanket
+completion claims. Prior phase sections are retained as historical records.
+
 # Phase 1 validation
 
 Recorded 2026-09-24 on Linux x86_64, Node 26.10.0, npm 12.1.0,
@@ -260,3 +265,77 @@ The existing npm audit reports 13 upstream findings (2 low, 1 moderate, 10 high)
 as in prior-phase dependency review. No unrelated dependency migration was made.
 Optional speaker-note generation uses Slidev's bundled Chromium path as documented.
 The website requires a minimal HTTP server (ES modules); the PDF opens directly offline.
+
+## Independent final audit (2026-09-25)
+
+**Audit performed; project acceptance remains open.** All 87 SPEC IDs were reviewed
+individually: **86 verified**, **0 partially implemented**, **0 not implemented**,
+**D-05 not verifiable in the current environment**. A projector/room/viewing-distance
+review is still needed; software contrast and size checks passed. This corrects the
+earlier statement that every mandatory requirement was fully verified.
+
+### Fresh command evidence
+
+Linux x86_64, Node 26.10.0, existing locked dependencies and locally installed Chromium.
+The first sandboxed check passed through production build, then failed to bind its
+loopback server (`listen EPERM`). The approved rerun outside that restriction exited 0.
+No reproducible application failure occurred and no runtime change was required.
+
+| Command / suite                                                           | Observed result                                                                                                                                                                                          |
+| :------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm install`                                                             | Exit 0 against existing installation; lockfile unchanged. npm warned that Playwright install scripts were blocked; the existing browser worked. This was not a fresh-cache install.                      |
+| `npm run dev` + `SMOKE_URL=http://localhost:3030 npm run test:foundation` | Both entries started; all 29 main slides and appendix round trip passed with external requests blocked; servers stopped after review.                                                                    |
+| `npm run check`                                                           | Exit 0; full log copied to `output/final-audit/check.log`.                                                                                                                                               |
+| `typecheck`, `lint`, `format:check`                                       | Passed inside full check; final documentation formatting checked separately after edits.                                                                                                                 |
+| `npm test`                                                                | 17 passing Node unit tests; config, asset/reference failures, math syntax, citation styles, chart inputs, QR and remote-resource fixtures.                                                               |
+| `npm run build`                                                           | Main and appendix production builds passed, including scientific/resource build hooks.                                                                                                                   |
+| `test:smoke`, `test:interaction`, `test:accessibility`                    | Passed real Slidev component/browser checks, native steps/reset/re-entry, print fallback, reduced motion, local assets, contrast, names and focus. No separate component-mount test runner is installed. |
+| `validate:resources`, `validate:references`, `validate:assets`            | Passed. One used literature record, one asset record and four equations resolved. Negative inputs tested by unit fixtures.                                                                               |
+| `test:pdf` / PDF export script                                            | Fresh 30-page PDF passed count/text/font/chrome assertions; native browser print produced 29 main pages.                                                                                                 |
+| `test:packaging` / PNG export script                                      | Single-slide selection produced one PNG; full-series path produced 30 PNGs and manifest.                                                                                                                 |
+| `test:packaging` / emergency export script                                | Fresh site, appendix, PDF, README and 30 optional PNGs; independently served copied site passed blocked-network smoke.                                                                                   |
+| `test:packaging` / starter script                                         | Standalone renamed source copied, framework files matched, existing destination rejected.                                                                                                                |
+| `test:themes`                                                             | Six generated-deck builds: three themes × two aspect ratios; offline browser, accessibility and fresh 30-page PDF regression passed for each.                                                            |
+
+PDF/PNG/emergency generation above ran the actual export scripts through the complete
+suite, not cached-artifact checks. `package.json` exposes the same scripts as
+`export:pdf`, `export:png` and `export:emergency`. Full independent generated-deck
+installation and optional notes/click-state variants remain historical Phase 4
+evidence; they were not repeated in this audit.
+
+### Artifact and visual evidence
+
+- `output/decksmith-foundation.pdf`: all 30 pages freshly rendered with Poppler to
+  `output/final-audit/page-*.png`; all pages reviewed in three contact sheets.
+  Text, formulas, sources, diagrams, charts, QR and final comparisons were present
+  with no observed clipping/overlap or interactive export controls.
+- Additional full-size review: structured math page 7 and dark-theme code page 10.
+  Browser code/chart screenshots from all six configurations were reviewed together
+  in `output/final-audit/theme-browser-review.png`. Other theme pages receive automated
+  bounds/text/font checks in this run; earlier full theme visual reviews remain historical.
+- `output/themes/<theme>-<ratio>/showcase.pdf` and `smoke/` contain fresh matrix evidence.
+  `output/latest-png.json` and `output/latest-emergency.json` identify fresh export
+  directories; emergency manifest and PNG counts were checked by the suite.
+- Individual requirement evidence now lives in `REQUIREMENTS.md`, replacing repeated
+  blanket labels. README now includes an exact add-slide/import example, directory
+  map, coverage limits and the open projector verification item.
+
+### Architecture and limitations
+
+Reviewed components, composable lifecycle, libraries, setup/preparser, Vite integration,
+export scripts, dependency declarations, CSS layers/tokens and content separation.
+No custom navigation engine, talk-specific component logic, unnecessary direct
+dependency, remote runtime service or uncontrolled persistent component state was found.
+Inline bindings represent geometry/state or token-based intensity. Known upstream
+Slidev adapters and example deviations remain documented in DEC-02/03/06/09/14/15.
+The scientific validators intentionally share one dependency graph; they are aliases,
+not duplicated configuration implementations.
+
+Boundaries: no physical projector/camera tests or minimum-Node run; the website needs
+a local HTTP server and JavaScript, while PDF needs neither. Dense formulas and
+bibliographies need author-selected line breaks/pagination. Screenshot/contrast tests
+do not establish universal accessibility. Conditional showcase interaction/PDF
+assertions stop applying when their examples are removed; new content needs review.
+The external-resource scan cannot prove every computed, unvisited runtime branch.
+Historical upstream dependency advisories are recorded above; no fresh registry
+security audit or dependency migration was part of this run.

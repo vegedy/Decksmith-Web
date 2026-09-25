@@ -280,3 +280,25 @@ the surrounding secondary text tokens. The shared frame now binds native code si
 to 18px and its line height to 1.5. Shiki uses bundled GitHub high-contrast light/dark
 palettes; rendered token contrast and size are tested, and minimal-print renders
 monochrome code. Line focus retains its explicit border without a contrast-reducing tint.
+
+## DEC-15 — Independent audit evidence boundary (2026-09-25)
+
+The independent final audit replaces blanket completion labels with the four requested
+classifications. Software checks and rendered artifacts support 86 requirements. D-05
+remains **not verifiable in the current environment** because physical projector
+readability depends on equipment, lighting and audience distance unavailable here.
+DEC-05/12 thresholds remain useful evidence; they do not waive the qualitative criterion.
+
+Architecture review found no additional clear runtime violation requiring a refactor:
+Slidev owns routing/clicks/export; local component state resets on native page changes;
+Vue components accept generic typed data; diagram geometry and slider bindings are
+computed data, while presentation styling uses shared tokens/layers. QR black/white
+geometry deliberately preserves scan contrast. Direct dependencies each have an
+identified toolchain, local-font, parser, motion or QR role (DEC-07/08/10).
+
+Existing deviations from illustrative SPEC examples are retained: separate appendix
+entry (DEC-02), local bundled fonts instead of a required public/fonts directory,
+flat auto-registered component files, delimiter adaptation (DEC-03), typed pipeline
+steps instead of the illustrative nodes/animated API (DEC-14), and a directory-based
+emergency package (DEC-13). None changes a mandatory acceptance criterion. No large
+refactor or feature expansion was necessary.
