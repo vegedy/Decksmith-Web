@@ -1,0 +1,49 @@
+{
+  "name": "decksmith-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "node --experimental-strip-types scripts/dev.ts",
+    "build": "slidev build slides.md --base ./ --without-notes && slidev build appendix.md --base ./ --out dist/appendix --without-notes",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:foundation",
+    "export:pdf": "node --experimental-strip-types scripts/export-pdf.ts",
+    "dev:main": "slidev slides.md --port 3030",
+    "dev:appendix": "slidev appendix.md --port 3031",
+    "test:foundation": "node --experimental-strip-types scripts/smoke.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@slidev/cli": "53.0.0",
+    "@slidev/client": "53.0.0",
+    "@slidev/types": "53.0.0",
+    "vite": "8.3.1",
+    "vue": "3.5.43"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@slidev/parser": "53.0.0",
+    "@types/node": "26.6.2",
+    "eslint": "10.11.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-vue": "10.11.1",
+    "playwright-chromium": "1.63.0",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.70.1",
+    "vue-eslint-parser": "10.4.1",
+    "vue-tsc": "3.3.11"
+  },
+  "overrides": {
+    "floating-vue": "5.2.2"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@slidev/client": ["./types/slidev-client.d.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.vue"],
+  "exclude": ["node_modules", "dist", "output"]
+}

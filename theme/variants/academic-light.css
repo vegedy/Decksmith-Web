@@ -1,0 +1,12 @@
+@layer theme {
+  :root {
+    --color-canvas: #f8fafc;
+    --color-surface: #fff;
+    --color-text: #172b3a;
+    --color-text-muted: #526575;
+    --color-primary: #174e7a;
+    --color-accent: #12665a;
+    --color-warning: #805200;
+    --color-danger: #a12435;
+  }
+}

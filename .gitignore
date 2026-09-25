@@ -1,0 +1,7 @@
+node_modules/
+dist/
+output/
+.slidev/
+components.d.ts
+*.log
+.export.md

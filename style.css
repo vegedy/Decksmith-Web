@@ -1,0 +1,7 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource/jetbrains-mono/400.css';
+@import './theme/tokens.css';
+@import './theme/variants/academic-light.css';
+@import './theme/typography.css';
+@import './theme/global.css';
+@import './theme/print.css';

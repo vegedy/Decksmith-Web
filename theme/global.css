@@ -1,0 +1,70 @@
+@layer layout {
+  .deck-frame {
+    position: relative;
+    height: 100%;
+    padding: var(--space-5);
+    background: var(--color-canvas);
+    box-sizing: border-box;
+  }
+  .deck-content {
+    height: calc(100% - var(--space-4));
+    min-width: 0;
+  }
+  .layout-title .deck-content,
+  .layout-section .deck-content {
+    display: grid;
+    align-items: center;
+  }
+  .title-meta {
+    display: flex;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    margin-top: var(--space-4);
+  }
+  .two-column {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-4);
+    height: 100%;
+  }
+  .two-column[data-ratio='wide-left'] {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+  .two-column[data-ratio='wide-right'] {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
+  .deck-footer {
+    position: absolute;
+    left: var(--space-5);
+    right: var(--space-5);
+    bottom: var(--space-3);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+    z-index: var(--z-footer);
+  }
+  .deck-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background: var(--color-primary);
+  }
+  .deck-frame img,
+  .deck-frame svg {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

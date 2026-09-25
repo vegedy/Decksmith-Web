@@ -1,0 +1,23 @@
+@layer print {
+  @media print {
+    .deck-frame {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .deck-progress,
+    .slidev-nav {
+      display: none !important;
+    }
+    .deck-frame a {
+      color: inherit;
+    }
+  }
+}
+
+/* Slidev's exporter renders the print route using screen media. */
+@layer print {
+  html.print .deck-progress,
+  html.print .slidev-nav {
+    display: none !important;
+  }
+}

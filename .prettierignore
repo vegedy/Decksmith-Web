@@ -1,0 +1,10 @@
+node_modules
+dist
+output
+package-lock.json
+components.d.ts
+slides.md
+slides/
+docs/SPEC.md
+AGENTS.md
+.export.md

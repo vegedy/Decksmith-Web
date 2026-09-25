@@ -1,8 +1,8 @@
 # Implementation plan
 
-`docs/SPEC.md` is authoritative. All implementation milestones are **not started**.
-This run prepares documentation only; Phase 1 requires a subsequent implementation task.
-The repository initially contains only documentation, with no package manifest or application.
+`docs/SPEC.md` is authoritative. **Phase 1 is implemented and verified**; Phases 2–4
+and the final audit are not started. Validation evidence is in `docs/VALIDATION.md`.
+The repository began with documentation only.
 
 ## Planned architecture and boundaries
 
@@ -23,8 +23,9 @@ the starter CLI and showcase, are tracked below without inventing new requiremen
 
 ## Validation contract
 
-Commands below are **planned interfaces**, not available or executed today. Establish
-`npm run dev`, `npm run build`, `npm run check` and `npm run export:pdf` in Phase 1.
+The Phase 1 commands `npm run dev`, `npm run build`, `npm run check` and
+`npm run export:pdf` are implemented and verified. Commands introduced by later phases
+remain planned interfaces.
 `npm run check` must run strict type checking, ESLint, formatting checks and the production
 build, plus every additional automated validation/test introduced in later phases.
 Avoid recursive script wiring. Each phase runs the four baseline commands on Linux;
@@ -37,7 +38,13 @@ successful process exit alone cannot establish readability or export fidelity.
 
 ## Phase 1 — Foundation
 
-**Status:** Not started.
+**Status:** Complete for the foundation scope (2026-09-24).
+
+**Evidence:** `docs/VALIDATION.md`; `package.json`, `deck.config.ts`, `slides.md`,
+`appendix.md`, `components/`, `layouts/`, `theme/`, `setup/`, `scripts/`, `tests/`.
+All baseline checks passed, including offline browser inspection and six-page PDF export.
+DEC-01/DEC-02 are resolved; DEC-05 has baseline thresholds. Shared requirement IDs
+retain later-phase work in the traceability matrix.
 
 **Scope:** Establish the empty, reusable offline deck template and its build/export
 pipeline. No scientific component suite or interactive visualization suite yet.
