@@ -1,0 +1,19 @@
+- id: shannon1948
+  type: article
+  authors: [Claude E. Shannon]
+  year: 1948
+  title: A Mathematical Theory of Communication
+  containerTitle: Bell System Technical Journal
+  doi: 10.1002/j.1538-7305.1948.tb01338.x
+  url: https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+  accessedAt: '2026-09-25'
+- id: documents
+  type: image
+  authors: [Decksmith contributors]
+  year: 2026
+  title: Local source documents illustration
+  accessedAt: '2026-09-25'
+  license: Original repository artwork; no reuse license declared
+- id: unused-example
+  type: web
+  title: Unused records do not appear in the bibliography

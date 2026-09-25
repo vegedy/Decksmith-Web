@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { execFileSync } from 'node:child_process'
 import { createServer } from 'node:http'
 import { readFile, stat, mkdir } from 'node:fs/promises'
 import { extname, resolve, sep } from 'node:path'
@@ -123,7 +124,66 @@ try {
         .filter((child) => child.getBoundingClientRect().bottom > footer.top)
         .map((child) => child.textContent)
     })
+    await page.screenshot({ path: `output/smoke/slide-${i + 1}.png` })
     assert.deepEqual(overflow, [], `Content overlaps footer on slide ${i + 1}`)
+    assert.equal(await frame.locator('.katex-error').count(), 0)
+    const bounds = await frame.evaluate((el) => {
+      const area = el.getBoundingClientRect()
+      const footer = el.querySelector('.deck-footer')!.getBoundingClientRect()
+      return [
+        ...el.querySelectorAll(
+          '.equation, .katex-html, .notation-table, .source-footer, .scientific-code, .scientific-figure, .callout, .takeaway, .references-list',
+        ),
+      ]
+        .filter((node) => {
+          const rect = node.getBoundingClientRect()
+          return (
+            rect.width &&
+            (rect.right > area.right + 1 ||
+              rect.left < area.left - 1 ||
+              rect.bottom > footer.top + 1)
+          )
+        })
+        .map((node) => node.className)
+    })
+    assert.deepEqual(
+      bounds,
+      [],
+      `Scientific content overflow on slide ${i + 1}`,
+    )
+    const hiddenSteps = frame.locator('.equation .slidev-vclick-hidden')
+    if (await hiddenSteps.count()) {
+      await page.keyboard.press('ArrowRight')
+      await page.waitForTimeout(100)
+      assert.equal(
+        await frame.locator('.equation .slidev-vclick-hidden').count(),
+        0,
+      )
+      await page.keyboard.press('ArrowLeft')
+      await page.waitForTimeout(100)
+      assert.ok(await frame.locator('.equation .slidev-vclick-hidden').count())
+    }
+    const zoom = frame.locator('.figure-zoom')
+    if (await zoom.count()) {
+      await zoom.click()
+      assert.ok(
+        await frame
+          .locator('dialog')
+          .evaluate((el) => (el as HTMLDialogElement).open),
+      )
+      await page.keyboard.press('Escape')
+      assert.equal(
+        await frame
+          .locator('dialog')
+          .evaluate((el) => (el as HTMLDialogElement).open),
+        false,
+      )
+      await zoom.click()
+      await page.goto(`${origin}/#/${i + 2}`)
+      await page.waitForTimeout(100)
+      assert.equal(await page.locator('dialog[open]').count(), 0)
+      await page.goto(`${origin}/#/${i + 1}`)
+    }
     await page.screenshot({ path: `output/smoke/slide-${i + 1}.png` })
   }
   await page.keyboard.press('ArrowRight')
@@ -144,6 +204,64 @@ try {
     await page.locator('[data-deck-target="main"]:visible').first().click()
     await page.locator('.slidev-page-1 .deck-frame').waitFor()
   } else {
+    await page.goto(`${origin}/#/1`)
+    await page.locator('.slidev-page-1 .deck-frame').waitFor()
+  }
+  if (!process.env.SMOKE_URL) {
+    await page.goto(`${origin}/?print=true#/print`)
+    await page.waitForFunction(
+      (count) =>
+        document.querySelectorAll('#print-content .deck-frame').length ===
+        count,
+      total,
+    )
+    await page.waitForFunction(() => document.fonts.status === 'loaded')
+    assert.equal(await page.locator('.deck-frame').count(), total)
+    assert.equal(
+      await page
+        .locator(
+          '.figure-zoom:visible, .slidev-nav:visible, .deck-progress:visible',
+        )
+        .count(),
+      0,
+    )
+    assert.equal(await page.locator('.katex-error').count(), 0)
+    for (const frame of await page.locator('.deck-frame').all()) {
+      const overflow = await frame.evaluate((el) => {
+        const footer = el.querySelector('.deck-footer')!.getBoundingClientRect()
+        const area = el.getBoundingClientRect()
+        return [
+          ...el.querySelectorAll(
+            'h1, p, li, .equation, .katex-html, .notation-table, .source-footer, .scientific-code, .scientific-figure, .callout, .takeaway',
+          ),
+        ]
+          .filter((node) => {
+            const r = node.getBoundingClientRect()
+            return (
+              r.width && (r.bottom > footer.top + 1 || r.right > area.right + 1)
+            )
+          })
+          .map((node) => node.className || node.textContent)
+      })
+      assert.deepEqual(overflow, [], 'Print content overflow')
+    }
+    await page.emulateMedia({ media: 'print' })
+    await page.pdf({
+      path: 'output/smoke/browser-print.pdf',
+      preferCSSPageSize: true,
+      printBackground: true,
+    })
+    const printInfo = execFileSync(
+      'pdfinfo',
+      ['output/smoke/browser-print.pdf'],
+      { encoding: 'utf8' },
+    )
+    assert.equal(
+      Number(printInfo.match(/Pages:\s+(\d+)/)?.[1]),
+      total,
+      'Browser print page count',
+    )
+    await page.emulateMedia({ media: 'screen' })
     await page.goto(`${origin}/#/1`)
     await page.locator('.slidev-page-1 .deck-frame').waitFor()
   }

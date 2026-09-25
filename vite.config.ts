@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   server: { strictPort: true },
+  // Keep Slidev's native print route without build-time PDF auto-download.
+  define: { __SLIDEV_FEATURE_PRINT__: true },
   build: { sourcemap: false },
   plugins: [
     {

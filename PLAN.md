@@ -1,6 +1,6 @@
 # Implementation plan
 
-`docs/SPEC.md` is authoritative. **Phase 1 is implemented and verified**; Phases 2–4
+`docs/SPEC.md` is authoritative. **Phases 1–2 are implemented and verified**; Phases 3–4
 and the final audit are not started. Validation evidence is in `docs/VALIDATION.md`.
 The repository began with documentation only.
 
@@ -80,13 +80,19 @@ of later scientific/interactive export requirements.
 
 ## Phase 2 — Scientific foundation
 
-**Status:** Not started. **Depends on:** Phase 1.
+**Status:** Complete (2026-09-25). **Depends on:** Phase 1.
+
+**Evidence:** `docs/VALIDATION.md`; typed scientific components, `data/references.yaml`,
+`lib/`, `scripts/science.ts`, `scripts/test-pdf.ts`, scientific Markdown slides and tests.
+DEC-03/04 are resolved; DEC-08/09 document scope and print integration.
+All Phase 2 commands and browser/PDF inspections pass. GlossaryTerm is included at
+the user’s explicit request; broader Phase 4 catalog review remains planned.
 
 **Scope:** Mathematical content, citations, scientific content components, input
 validation and print fidelity. Formula sequencing must remain compatible with Phase 3.
 
 **Affected IDs:** I-01, I-02, I-06, I-07; M-01–M-07; Q-01–Q-09;
-K-03, K-11–K-18; D-09; E-01, E-02, E-06–E-09.
+K-03, K-11–K-18, K-21 (user-authorized early implementation); D-09; E-01, E-02, E-06–E-09.
 
 **Deliverables:**
 
@@ -96,7 +102,7 @@ K-03, K-11–K-18; D-09; E-01, E-02, E-06–E-09.
   `SourceFooter`, `ReferencesSlide`, deduplicated used-reference collection,
   all three citation styles and separate asset-source reporting.
 - `Figure` with accessible caption/source/license/zoom, Shiki-backed `CodeBlock`,
-  `Callout` and `Takeaway`, each with documented typed props.
+  `Callout`, `Takeaway` and user-requested `GlossaryTerm`, each with documented typed props.
 - Reference and asset validators, print CSS and browser print fallback;
   PDF regression examples for formulas, text, images and sources.
 - Initial scientific smoke deck, expanded to full E-08 coverage in Phase 3.
@@ -157,7 +163,7 @@ K-19, K-21–K-23 newly delivered; D-01–D-10; IA-04–IA-06; E-01–E-10.
 
 **Deliverables:**
 
-- `QrLink`, `GlossaryTerm`, `QuestionSlide`, `Agenda`; complete documented component showcase.
+- `QrLink`, `QuestionSlide`, `Agenda`; review Phase 2 `GlossaryTerm`; complete documented component showcase.
 - `academic-dark`, `minimal-print`, layout variants and verification across aspect
   ratios, projector display and narrow browser widths. Preserve the optional status of 4:3.
 - Accessibility/contrast checks and full reduced-motion/export review.

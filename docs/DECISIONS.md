@@ -29,7 +29,7 @@ these semantics and demonstrate them using Slidev extension points without a cus
 
 ## DEC-03 — Formula input syntax and rendering fidelity
 
-**Status:** Open; resolve in Phase 2. **Affected:** M-01, M-02, M-05, M-06, E-02.
+**Status:** Resolved in Phase 2; see resolutions below. **Affected:** M-01, M-02, M-05, M-06, E-02.
 
 The acceptance/example syntax uses LaTeX `\(...\)` and `\[...\]`, including inside
 `Equation`. Confirm the chosen Slidev/KaTeX integration preserves this input through
@@ -40,7 +40,7 @@ KaTeX output and verify formulas separately from optional rasterization of other
 
 ## DEC-04 — Citation example and reference collection boundaries
 
-**Status:** Open; resolve in Phase 2. **Affected:** Q-01–Q-04, Q-07–Q-09, I-05.
+**Status:** Resolved in Phase 2; see resolutions below. **Affected:** Q-01–Q-04, Q-07–Q-09, I-05.
 
 Q-01 contains an empty alternative example. Q-07 explicitly names all three required
 styles and author-year is the stated default; the empty example does not define a fourth
@@ -128,3 +128,63 @@ Slidev 53's notes exporter also assumes a history-route URL and does not expose
 `--executable-path`. The pre-parser selects native history routing only for the
 `export-notes` process, while presentation/build remain hash-routed. Notes export
 requires Playwright's matching browser. No custom PDF renderer is introduced.
+
+## Phase 2 resolutions (2026-09-25)
+
+### DEC-03 resolution — native math with delimiter adaptation
+
+The preparser maps the specification's `\(...\)` and `\[...\]` to native
+Slidev delimiters outside code examples. `Equation` is a typed semantic wrapper around
+native math in its slot; `NotationTable` calls the same KaTeX renderer directly.
+`setup/katex.ts` enables strict errors and disables trusted HTML commands. KaTeX HTML,
+MathML and bundled fonts remain text/vector output in PDF, with no screenshots.
+Long equations use explicit `aligned` breaks and an optional compact size. Native
+Slidev click directives demonstrate formula sequencing without a Phase 3 subsystem.
+The build-time equation registry assigns numbers in main/appendix order, rejects
+missing/duplicate IDs and unresolved references, and supports forward references.
+Evidence: `tests/science.test.ts`, scientific slides, browser/PDF checks.
+
+### DEC-04 resolution — declarative collection across both entries
+
+`data/references.yaml` implements the specification's typed model. The build collector
+uses Slidev's resolved main and appendix slides, frontmatter citations followed by
+literal component references. The manifest always includes both entries even when
+appendix PDF output is disabled; this preserves IDs across the website, appendix and
+PDF. It contains only used records. Literature is numbered first, assets next, each
+in first-use order; duplicates share a number. Figure sources and image-type records
+are collected separately; shared literature/asset use is allowed. Bibliographies
+render all collected records by default with explicit pagination props for long lists.
+
+Code examples/comments are excluded. Reference keys and Figure paths must be literal
+attributes, not arbitrary Vue expressions. PascalCase and kebab-case are accepted.
+This restriction enables build diagnostics; custom Vue-generated citations must be
+predeclared in frontmatter. `citationStyle` avoids Vue's reserved `style` attribute.
+The short-footnote style includes the stable number, author/year and short title;
+full provenance stays in the bibliography. `showSourceFooters` controls automatic and
+explicit source rows, independently of inline citations and Figure attribution.
+
+### DEC-08 — dependencies, scope and static interactions
+
+YAML, KaTeX and Vue compiler-dom were already installed through Slidev; they are now
+declared directly at their existing locked versions because framework code imports
+them. No new renderer or highlighting engine is added. CodeBlock decorates native
+Slidev/Shiki output; NotationTable uses KaTeX. Poppler is an explicit Linux validation
+prerequisite, not a presentation runtime dependency.
+
+The user explicitly included GlossaryTerm in Phase 2, moving K-21 implementation
+forward from Phase 4; broader catalog/accessibility review stays in Phase 4. Figure
+uses a native modal dialog with keyboard dismissal, close/reset and slide-leave reset.
+Glossary definitions remain visible, with native title tooltips as an additional aid.
+Neither requires animation. Scientific styles use existing semantic tokens/layers.
+No Phase 3 visualization or animation library has been implemented.
+
+### DEC-09 — native browser print route
+
+Slidev 53 normally only includes its print route in export mode or builds requesting
+an automatic downloadable PDF; its dev route is otherwise absent. `vite.config.ts`
+sets Slidev's existing `__SLIDEV_FEATURE_PRINT__` define to retain that native route
+in dev/static builds without a second automatic export. The query `?print=true` is
+required before the hash route to select final click states and suppress controls.
+App setup supplies a CSS page size from the central aspect ratio for browser printing.
+This is a narrow upstream integration boundary, like DEC-06: verify it on upgrades.
+The native route, layout, slide rendering, click state and PDF pipeline remain Slidev's.

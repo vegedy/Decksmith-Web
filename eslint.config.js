@@ -12,6 +12,7 @@ export default ts.config(
     files: ['**/*.vue'],
     languageOptions: { parserOptions: { parser: ts.parser } },
     rules: {
+      'no-undef': 'off', // TypeScript checks names, including DOM types.
       'vue/multi-word-component-names': 'off',
       'vue/singleline-html-element-content-newline': 'off',
       'vue/max-attributes-per-line': 'off',

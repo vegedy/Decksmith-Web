@@ -1,8 +1,8 @@
 # Decksmith Web
 
-A local Slidev template for technical talks. Phase 1 provides Markdown content,
-Vue 3 layouts, strict TypeScript, a light theme, static hosting and PDF export.
-Scientific components, citation rendering and interactive visualizations belong to later phases.
+A local Slidev template for technical talks. Phases 1–2 provide Markdown content,
+Vue 3 layouts, strict TypeScript, scientific components, central citations, a light
+theme, static hosting and PDF export. Phase 3 visualizations remain planned.
 
 ## Start on Linux
 
@@ -24,14 +24,14 @@ dependencies. Exact direct versions and the lockfile define the build inputs.
 
 ## Commands
 
-| Command                   | Result                                                                                      |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| `npm run dev`             | Main and appendix development servers                                                       |
-| `npm run build`           | Offline static site in `dist/`, appendix in `dist/appendix/`                                |
-| `npm run export:pdf`      | `output/decksmith-foundation.pdf`, name controlled by configuration                         |
-| `npm run check`           | Strict types, lint, formatting, unit tests, both production builds and browser smoke checks |
-| `npm run test:foundation` | Check an existing build with external requests blocked; screenshots in `output/smoke/`      |
-| `npm run format`          | Format framework code and documentation                                                     |
+| Command                   | Result                                                                                  |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| `npm run dev`             | Main and appendix development servers                                                   |
+| `npm run build`           | Offline static site in `dist/`, appendix in `dist/appendix/`                            |
+| `npm run export:pdf`      | `output/decksmith-foundation.pdf`, name controlled by configuration                     |
+| `npm run check`           | Types, lint, formatting, tests, builds, source/asset validation, browser and PDF checks |
+| `npm run test:foundation` | Check an existing build with external requests blocked; screenshots in `output/smoke/`  |
+| `npm run format`          | Format framework code and documentation                                                 |
 
 PDF export and browser checks require Chromium. They prefer Playwright's bundled
 browser, then `/usr/bin/chromium` on Linux. If neither is present:
@@ -85,16 +85,16 @@ in slide frontmatter. Only `academic-light` is implemented; the type deliberatel
 not advertise future themes. `16:9` is the default; `4:3` selects Slidev's taller canvas.
 
 Footers, slide numbers and progress are independently controlled by configuration.
-`showSourceFooters` and `citations` preserve the specification's future integration
-contract; Phase 1 does not render citations or require the reserved bibliography file.
+`showSourceFooters` controls source rows; `citations` selects the default citation
+style and the central YAML bibliography file.
 `renderFinalAnimationState` maps to Slidev's single-page export versus click-step export;
 no custom animations are introduced. `includeNotes: true` additionally produces a
 `-notes.pdf` companion using Slidev's notes exporter. Static builds exclude speaker notes.
 
 Per-slide frontmatter supports `title`, `layout`, `chapter`, `citations`, `tags`,
 `timeBudget` (seconds), `variant` and `appendix`; see `types/deck.ts` and the demo.
-Custom metadata is carried by Slidev; it does not yet select content variants or
-validate citation IDs. See [Slidev's syntax](https://sli.dev/guide/syntax) and
+Custom metadata is carried by Slidev. `citations` is validated and renders a source
+row automatically; other custom metadata does not select content variants. See [Slidev's syntax](https://sli.dev/guide/syntax) and
 [configuration](https://sli.dev/custom/).
 
 ## Layouts and structural components
@@ -132,11 +132,101 @@ KaTeX's own local fonts are included automatically for native math (appendix smo
 Changing a font family requires bundling that font's CSS/assets in `style.css`; naming a
 remote font does not download it. No font CDN is configured.
 
-Vite fails unresolved imports. The foundation build hook rejects missing or remote literal
-images extracted by Slidev, including images under `public/`. Browser checks also fail
-on HTTP errors, broken rendered images, external requests, runtime errors or warnings,
-and content overlapping the footer. These checks cover the current deck, not every
-possible dynamic asset expression. Full source/asset validators remain in Phase 2.
+Vite fails unresolved imports. The scientific build hook validates references, equations
+and local assets. Browser checks reject HTTP errors, broken images, external requests,
+runtime errors/warnings and scientific content overflowing the slide or its footer.
+Checks cover presentation and native print routes, with external requests blocked.
 
 See `docs/VALIDATION.md` for measured evidence and limitations, including upstream npm
 advisories. See `docs/DECISIONS.md` for the appendix, configuration and CSS/type boundaries.
+
+## Scientific authoring (Phase 2)
+
+Central YAML data lives at `citations.bibliographyFile` (`data/references.yaml`). Each
+record has `id`, `type` and `title`; optional fields are `authors: string[]`, `year`,
+`containerTitle`, `publisher`, `doi`, `url`, `accessedAt` (ISO date) and `license`.
+Types: article, book, web, dataset, image, software. See `types/science.ts`.
+DOI/URL links are external navigation, never fetched runtime dependencies. The sample
+artwork's record states that no reuse license is declared; replace provenance with
+verified attribution for your own assets.
+
+The collector scans the main entry followed by the appendix, in slide/source order.
+Frontmatter citations come first within a slide. Only referenced records are included;
+repeated keys are deduplicated. Literature numbers precede asset-only numbers, each in
+first-use order. Both entries use this same manifest even when PDF appendix inclusion
+is disabled, so numeric IDs never change between outputs. `type: image` and Figure
+sources belong to the asset list. A paper used both in text and as a figure source can
+appear in both lists with the same numeric ID.
+
+Use literal IDs/source paths in Markdown. Dynamic `:id`, `:ids`, `:source`, `:src`
+and object `v-bind` on scientific reference/asset components are rejected because
+build-time validation must be complete. PascalCase and kebab-case tags are supported; use PascalCase for `Cite` and
+`Figure` to distinguish them from native HTML elements.
+Put reusable scientific content into imported Markdown slides; references hidden in
+arbitrary Vue/JavaScript must be declared in slide frontmatter. Dynamic runtime images
+outside `Figure` cannot be exhaustively checked statically; browser smoke checks
+validate rendered images. Ordinary local image imports remain Vite-validated.
+
+| Component         | Typed API / content                                                                                                                                                                                                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Cite`            | Required `id: string`; optional `citationStyle: 'author-year' \| 'numeric' \| 'short-footnote'`; defaults to central style. Use `citation-style` in Markdown.                                                                                          |
+| `SourceFooter`    | Optional `ids: string` (comma-separated keys), `citationStyle`; default slot also accepts `Cite` children. Frontmatter `citations: [key]` adds an automatic row. Avoid an extra explicit row for those same keys.                                      |
+| `ReferencesSlide` | `kind: 'literature' \| 'assets' \| 'all'` (literature default), `offset: number = 0`, optional `limit: number`. All used entries are shown by default. Split large bibliographies over slides with explicit offsets/limits; inspect each for overflow. |
+| `Equation`        | Required `id: string`; optional `label`, `explanation`, `compact: boolean`, `numbered: boolean = true`; default slot contains native block math. IDs are unique across both entries. Unnumbered blocks reserve their ID/number for stable references.  |
+| `EquationRef`     | Required `id`; optional `label = 'Eq.'`; renders the stable equation number, including forward references. It is a text reference, not a second navigation system.                                                                                     |
+| `NotationTable`   | Required `entries: NotationEntry[]` with `symbol` (LaTeX), `meaning`, optional `domain` (plain text); optional `caption`.                                                                                                                              |
+| `Figure`          | Required `src` (public-root path), `alt`, `caption`; optional reference `source`, `license` override, `zoom: boolean`. Source license is inherited.                                                                                                    |
+| `CodeBlock`       | Default slot holds a native fenced block, rendered by Slidev/Shiki. Optional `filename`, `language` display labels, `lineNumbers: boolean = true`, `focus: number[] = []` (one-based lines). Fence language controls actual highlighting.              |
+| `Callout`         | `kind: 'definition' \| 'assumption' \| 'limitation' \| 'risk' \| 'insight'` (insight default), optional `title`; default slot holds content. Kind is text-labeled as well as colored.                                                                  |
+| `Takeaway`        | Optional `label = 'Takeaway'`; default slot is the core message.                                                                                                                                                                                       |
+| `GlossaryTerm`    | Required `term`, `definition`; optional reference `source`. Native title tooltip plus a permanently visible definition, including print and keyboard use.                                                                                              |
+
+Example:
+
+```md
+<Cite id="shannon1948" />
+
+<Equation id="information" label="Information">
+
+\[
+I(p) = -\log_2 p
+\]
+
+</Equation>
+
+See <EquationRef id="information" />.
+```
+
+Both specification delimiters `\(...\)` / `\[...\]` and native `$...$` /
+`$$...$$` work. The preparser adapts delimiters outside code; leave blank lines around
+block math inside component slots. KaTeX runs with `trust: false` and errors enabled.
+Use `aligned` line breaks and optionally `compact` for long expressions, as in
+`slides/07b-long.md`. Keep mathematical meaning intact when choosing line breaks;
+there is no automatic formula rasterization or unreadable shrink-to-fit.
+
+Use Slidev `v-click` on formula steps as in `slides/13-steps.md`. Slidev owns the
+click lifecycle and final PDF state; Phase 3 animation components are not introduced.
+All other scientific components are stateless except Figure's native dialog: Escape,
+Close, clicking the dialog, or leaving the slide closes it. Re-entry starts closed.
+Zoom controls/dialogs are omitted from export. Code focus and glossary definitions
+remain visible in print. Existing reduced-motion rules apply throughout.
+
+## Scientific validation and browser print
+
+`npm run validate:references` and `npm run validate:assets` run the shared scientific
+validator (both intentionally check the complete dependency graph). Unknown reference
+keys, duplicate/missing equation IDs, unresolved equation references, invalid records,
+missing/remote figures and invalid frontmatter fail with source diagnostics. The same
+collector runs in Vite's build hook, so `npm run build` alone rejects those inputs.
+`npm run test:pdf` generates a fresh PDF, checks page count, embedded math fonts and
+representative extractable content. It requires Poppler utilities (`pdfinfo`,
+`pdftotext`, `pdffonts`; on Debian/Ubuntu install `poppler-utils`). Use `pdftoppm` for
+visual review. `npm run check` includes all these validations, production builds,
+offline browser checks, print bounds, and figure reset tests.
+
+For an emergency browser print, open `http://localhost:3030/?print=true#/print`, wait for fonts
+and images, then print with background graphics, no browser headers/footers, and the
+slide paper size. Print the appendix separately at port 3031 if required; the standard
+PDF command combines it automatically. `output/smoke/browser-print.pdf` exercises the
+native print route during browser tests. Review PDFs visually after content changes;
+text/font assertions are regression signals, not a full visual fidelity proof.

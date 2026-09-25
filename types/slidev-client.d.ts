@@ -4,7 +4,8 @@
 import type { ComputedRef } from 'vue'
 export function useSlideContext(): {
   $page: ComputedRef<number>
-  $slidev: { nav: { total: number } }
+  $frontmatter: { citations?: string[] }
+  $slidev: { nav: { total: number; currentPage: number } }
 }
 
 export function useNav(): { isPrintMode: ComputedRef<boolean> }

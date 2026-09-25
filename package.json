@@ -14,11 +14,14 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:foundation",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:foundation && npm run validate:references && npm run validate:assets && npm run test:pdf",
     "export:pdf": "node --experimental-strip-types scripts/export-pdf.ts",
     "dev:main": "slidev slides.md --port 3030",
     "dev:appendix": "slidev appendix.md --port 3031",
-    "test:foundation": "node --experimental-strip-types scripts/smoke.ts"
+    "test:foundation": "node --experimental-strip-types scripts/smoke.ts",
+    "validate:references": "node --experimental-strip-types scripts/validate-science.ts",
+    "validate:assets": "node --experimental-strip-types scripts/validate-science.ts",
+    "test:pdf": "node --experimental-strip-types scripts/test-pdf.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",
@@ -26,8 +29,11 @@
     "@slidev/cli": "53.0.0",
     "@slidev/client": "53.0.0",
     "@slidev/types": "53.0.0",
+    "@vue/compiler-dom": "3.5.43",
+    "katex": "0.18.9",
     "vite": "8.3.1",
-    "vue": "3.5.43"
+    "vue": "3.5.43",
+    "yaml": "2.9.1"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -4,6 +4,7 @@ import type { DeckConfig } from '../types/deck.ts'
 export function slidevConfig(config: DeckConfig = deck) {
   return {
     theme: 'none',
+    codeCopy: false,
     title: config.meta.title,
     author: config.meta.author,
     titleTemplate: '%s',

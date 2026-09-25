@@ -1,0 +1,169 @@
+@layer layout {
+  .citation {
+    font-size: 0.8em;
+    color: var(--color-text-muted);
+  }
+  .source-footer {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .source-footer .citation {
+    font-size: inherit;
+  }
+  .references-list {
+    font-size: var(--text-sm);
+    overflow-wrap: anywhere;
+  }
+  .reference-license {
+    margin-left: 0.25em;
+  }
+  .references-list li {
+    margin-bottom: var(--space-3);
+  }
+  .equation {
+    margin: var(--space-2) 0;
+  }
+  .equation figcaption,
+  .equation-explanation {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .equation-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .equation-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .equation-number {
+    font-size: var(--text-sm);
+  }
+  .equation.compact {
+    font-size: var(--text-sm);
+  }
+  .equation .katex-display {
+    margin: 0.6em 0;
+  }
+  .notation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    margin: var(--space-2) 0;
+  }
+  .notation-table th,
+  .notation-table td {
+    text-align: left;
+    padding: var(--space-1);
+    border-bottom: 1px solid var(--color-text-muted);
+  }
+  .callout,
+  .takeaway {
+    padding: var(--space-2);
+    margin: var(--space-2) 0;
+    border-left: 4px solid var(--color-primary);
+    background: var(--color-surface);
+  }
+  .callout-title {
+    text-transform: capitalize;
+  }
+  .callout[data-kind='risk'] {
+    border-color: var(--color-danger);
+  }
+  .callout[data-kind='limitation'],
+  .callout[data-kind='assumption'] {
+    border-color: var(--color-warning);
+  }
+  .takeaway {
+    border-color: var(--color-accent);
+  }
+  .callout p:last-child,
+  .takeaway p:last-child {
+    margin-bottom: 0;
+  }
+  .glossary dfn {
+    font-style: normal;
+    text-decoration: underline dotted;
+  }
+  .glossary-definition {
+    font-size: var(--text-sm);
+  }
+  .scientific-figure {
+    margin: var(--space-2) 0;
+  }
+  .scientific-figure > img {
+    display: block;
+    max-height: 160px;
+    margin: auto;
+  }
+  .scientific-figure figcaption {
+    font-size: var(--text-sm);
+    margin-top: var(--space-1);
+  }
+  .figure-zoom,
+  .figure-dialog button {
+    font-size: var(--text-sm);
+    text-decoration: underline;
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+  .figure-dialog {
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: var(--space-3);
+    background: var(--color-canvas);
+    color: var(--color-text);
+  }
+  .deck-frame .figure-dialog img {
+    max-height: 65vh;
+  }
+  .figure-dialog::backdrop {
+    background: #0009;
+  }
+  .scientific-code {
+    margin: var(--space-2) 0;
+  }
+  .scientific-code figcaption {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-sm);
+  }
+  .scientific-code pre {
+    counter-reset: code-line;
+  }
+  .scientific-code.with-line-numbers .line::before {
+    counter-increment: code-line;
+    content: counter(code-line);
+    display: inline-block;
+    width: 2em;
+    margin-right: 1em;
+    color: var(--color-text-muted);
+  }
+  .scientific-code .code-focused {
+    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+    border-left: 3px solid var(--color-accent);
+  }
+}
+@layer print {
+  html.print .figure-zoom,
+  html.print .figure-dialog {
+    display: none !important;
+  }
+  @media print {
+    .figure-zoom,
+    .figure-dialog {
+      display: none !important;
+    }
+    .equation,
+    .scientific-figure,
+    .scientific-code,
+    .reference-license {
+      margin-left: 0.25em;
+    }
+    .references-list li {
+      break-inside: avoid;
+    }
+  }
+}

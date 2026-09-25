@@ -5,3 +5,6 @@
 @import './theme/typography.css';
 @import './theme/global.css';
 @import './theme/print.css';
+
+@import 'katex/dist/katex.min.css';
+@import './theme/science.css';

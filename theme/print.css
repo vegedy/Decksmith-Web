@@ -21,3 +21,16 @@
     display: none !important;
   }
 }
+
+@layer print {
+  @media print {
+    .print-slide-container:last-child {
+      break-after: auto !important;
+    }
+    html.print,
+    html.print body,
+    html.print #app {
+      min-height: 0 !important;
+    }
+  }
+}
