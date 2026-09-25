@@ -1,7 +1,7 @@
 # Implementation plan
 
-`docs/SPEC.md` is authoritative. **Phases 1–2 are implemented and verified**; Phases 3–4
-and the final audit are not started. Validation evidence is in `docs/VALIDATION.md`.
+`docs/SPEC.md` is authoritative. **Phases 1–3 are implemented and verified**; Phase 4 and the final audit
+are not started. Validation evidence is in `docs/VALIDATION.md`.
 The repository began with documentation only.
 
 ## Planned architecture and boundaries
@@ -121,7 +121,15 @@ remains useful without JavaScript. Resolve DEC-03/DEC-04 before affected parser 
 
 ## Phase 3 — Visualization and interaction
 
-**Status:** Not started. **Depends on:** Phase 2.
+**Status:** Complete (2026-09-25). **Depends on:** Phase 2.
+
+**Evidence:** Additive typed components, `types/visualization.ts`, `lib/chart.ts`,
+`lib/motion.ts`, `lib/qr.ts`, `composables/interaction.ts`, motion/visualization CSS,
+showcase slides 14–26 and browser/PDF regression checks. DEC-10/11 record scope,
+native click lifecycle and static-state semantics. `npm run check`, production builds,
+offline interactive/static browser checks and 30-page PDF export pass; visual evidence
+is recorded in `docs/VALIDATION.md`. QrLink is included at the user’s
+explicit request; no other Phase 4 feature is included.
 
 **Scope:** Generic diagrams, charts, interaction and reusable animation with explicit
 lifecycle and export behavior. Reduced motion is required as animation is introduced.
@@ -132,7 +140,7 @@ IA-01–IA-10; E-02, E-03, E-06, E-08.
 **Deliverables:**
 
 - Typed `MetricCard`, `ComparisonTable`, `PipelineDiagram`, `ArchitectureDiagram`,
-  `Timeline`, `ProcessSteps`, `Chart`, `ConfusionMatrix`, `InteractiveReveal`, `ImageCompare`.
+  `Timeline`, `ProcessSteps`, `Chart`, `ConfusionMatrix`, `InteractiveReveal`, `ImageCompare`, user-requested `QrLink`.
 - All four required chart types; labels, legends and optional details/tooltips;
   architecture data flows and trust boundaries.
 - Central `fade`, `slide-up`, `slide-left`, `scale-in`, `highlight`, `draw-path`,
@@ -163,7 +171,7 @@ K-19, K-21–K-23 newly delivered; D-01–D-10; IA-04–IA-06; E-01–E-10.
 
 **Deliverables:**
 
-- `QrLink`, `QuestionSlide`, `Agenda`; review Phase 2 `GlossaryTerm`; complete documented component showcase.
+- `QuestionSlide`, `Agenda`; review Phase 2 `GlossaryTerm` and Phase 3 `QrLink`; complete documented component showcase.
 - `academic-dark`, `minimal-print`, layout variants and verification across aspect
   ratios, projector display and narrow browser widths. Preserve the optional status of 4:3.
 - Accessibility/contrast checks and full reduced-motion/export review.

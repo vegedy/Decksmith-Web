@@ -131,7 +131,7 @@ export function collectScience(
       for (const url of slide.images ?? []) validateImage(url, slide.file, root)
       const content = withoutExamples(slide.content)
       for (const match of content.matchAll(
-        /<(Cite|SourceFooter|Figure|GlossaryTerm|EquationRef|Equation|source-footer|glossary-term|equation-ref|equation)\b(?:[^>"']|"[^"]*"|'[^']*')*\/?\s*>/g,
+        /<(ImageCompare|image-compare|Cite|SourceFooter|Figure|GlossaryTerm|EquationRef|Equation|source-footer|glossary-term|equation-ref|equation)\b(?:[^>"']|"[^"]*"|'[^']*')*\/?\s*>/g,
       )) {
         const tag = match[0].replace(/\/?\s*>$/, '/>')
         const node = parse(tag).children[0]
@@ -145,7 +145,9 @@ export function collectScience(
             prop.name === 'bind' &&
             (!prop.arg ||
               prop.arg.type !== NodeTypes.SIMPLE_EXPRESSION ||
-              ['id', 'ids', 'source', 'src'].includes(prop.arg.content))
+              ['id', 'ids', 'source', 'src', 'before', 'after'].includes(
+                prop.arg.content,
+              ))
           )
             throw new Error(
               `${node.tag}: IDs, sources and asset paths must be literal attributes`,
@@ -159,6 +161,20 @@ export function collectScience(
           attrs.ids.split(/\s*,\s*/).forEach((id) => add(id))
         if (['figure', 'glossaryterm'].includes(name) && attrs.source)
           add(attrs.source, name === 'figure')
+        if (name === 'imagecompare') {
+          for (const key of ['before', 'after']) {
+            const src = attrs[key]
+            if (!src || !src.startsWith('/'))
+              throw new Error(
+                'ImageCompare needs literal public-root before/after paths',
+              )
+            validateImage(src, slide.file, root)
+          }
+          if (!attrs['before-alt'] || !attrs['after-alt'] || !attrs.caption)
+            throw new Error(
+              'ImageCompare needs before-alt, after-alt and caption',
+            )
+        }
         if (name === 'figure') {
           if (!attrs.src || !attrs.alt || !attrs.caption)
             throw new Error('Figure needs src, alt and caption')

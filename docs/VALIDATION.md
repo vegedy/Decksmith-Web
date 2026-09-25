@@ -102,3 +102,55 @@ rejected; custom Vue-hidden references must be predeclared in frontmatter. Full 
 interaction/visualization coverage and Phase 4 theme/accessibility/catalog audits remain
 planned. The native print feature define is an upstream boundary to recheck on upgrades
 (DEC-09). No later-phase requirement is waived.
+
+# Phase 3 validation
+
+Recorded 2026-09-25 on the same Linux / Node 26.10.0 environment. Phase 3 preserves
+all existing public component contracts and adds the requested visualization and
+interaction suite, including user-requested QrLink. Phase 4 is not implemented.
+
+## Commands and automated evidence
+
+- Dependency installation passed: `@vueuse/motion` 3.0.3 (already transitive) is now
+  direct; `qrcode-generator` 2.0.4 is pinned. npm reported 13 dependency advisories;
+  no forced dependency upgrades were applied in this milestone.
+- `npm run check` passed: strict Vue/TypeScript, ESLint, Prettier, 15 unit tests,
+  both production builds, offline smoke and interaction suites, reference/asset
+  validation, and a fresh 30-page PDF regression (29 main slides + one appendix).
+- `npm run dev` started both entries; `SMOKE_URL=http://localhost:3030 npm run test:foundation` passed all 29 main slides and appendix navigation.
+- `npm run build` and `npm run export:pdf` also passed independently. PDF has no
+  JavaScript, retains selectable text and embedded KaTeX fonts, and includes all
+  representative diagram/chart/reveal/comparison/QR content without controls.
+- Browser smoke blocks external requests and rejects page errors, console warnings,
+  failed images and content/footer overflow. It covers all main slides, appendix
+  links, local fonts, narrow viewport and native browser print (29 pages).
+- `npm run test:interaction` passes native forward/reverse clicks and reset, normal
+  and reduced motion, all preset reveal steps, keyboard slider changes, explicit
+  reset, slide re-entry, chart detail-panel reset, and complete print final states.
+- Unit tests include negative/constant chart domains, invalid chart/radar inputs,
+  QR URL validation/quiet zone and missing/dynamic ImageCompare asset diagnostics.
+- Loopback servers and Chromium required execution outside this environment's sandbox;
+  an initial sandbox `listen EPERM` was resolved using approved execution. No runtime
+  service or network dependency was introduced. The Browser skill found no connected
+  browser; repository Playwright/Chromium provided automated interaction and screenshots.
+
+## Visual evidence
+
+Inspected browser screenshots and Poppler-rendered PDF pages 15–28 covering every new
+component: pipeline and process steps, trust boundaries/data flows, timeline/comparison
+table, all four chart types, matrix/shade legend, metric context, complete reveals,
+all motion vocabulary content, before/after static pairs and QR URL. Layout review
+caught and corrected dense examples, radar label placement, chart legend spacing and overlapping live comparison labels
+(the slider label supplies both names; static pairs retain individual labels);
+all smoke bounds subsequently passed. The final PDF's reveal status explicitly says
+static export, and no slider or reset controls appear in print.
+
+Local ignored artifacts: `output/smoke/` (browser screenshots, motion/compare checks,
+`browser-print.pdf`), `output/phase3-review/` (rendered pages/contact sheets), and
+`output/decksmith-foundation.pdf`. Reproduce with `npm run check` and render with
+`pdftoppm -png output/decksmith-foundation.pdf output/review`.
+
+The QR was checked as an SVG with a quiet zone and visible URL; no physical camera
+scan was performed. General accessibility/theme/aspect-ratio review, packaging and
+starter workflows remain Phase 4 scope. Tests validate this bundled showcase; authors
+must inspect new dense datasets and coordinate-based diagrams for their own layouts.

@@ -188,3 +188,45 @@ required before the hash route to select final click states and suppress control
 App setup supplies a CSS page size from the central aspect ratio for browser printing.
 This is a narrow upstream integration boundary, like DEC-06: verify it on upgrades.
 The native route, layout, slide rendering, click state and PDF pipeline remain Slidev's.
+
+## Phase 3 resolutions (2026-09-25)
+
+### DEC-10 — additive visualization scope and rendering
+
+The user explicitly requested QrLink in Phase 3, bringing K-19 forward; other Phase 4
+work remains unauthorized. Existing component contracts are preserved. HTML handles
+cards, tables, pipelines, timelines, procedure steps and matrices; SVG handles charts,
+architecture and QR. No Canvas or charting engine is necessary. Diagram coordinates
+are explicit author data so trust boundaries and flow labels remain predictable in
+export. Charts use numeric x/y points, labeled series and a common scale; radar inputs
+must share axes. Author-provided details are optional; labels, values, axes and legends
+carry the message without hover. Dense content requires author pagination, not silent
+clipping or automatic font reduction.
+
+`@vueuse/motion` is declared directly at the already-installed 3.0.3 version to use
+the prescribed Vue Motion stack. `qrcode-generator` 2.0.4 is the only new runtime
+package: a small local encoder avoids an external QR service or a bespoke error-
+correction implementation. Vue renders the encoded module path as SVG without HTML
+injection; URLs are validated and canonicalized. The printable quiet zone is explicit.
+
+### DEC-11 — native clicks, local reset and static states
+
+InteractiveReveal registers absolute click positions with native `v-click`; it does
+not create a second step engine. Reset writes Slidev's writable click context back to
+`clicksStart`. Forward entry, backward entry (final step) and explicit click URLs retain
+native Slidev semantics. ProcessSteps delegates to these same reveals. Transient image
+position and chart detail panels reset on native page changes, with no shared state or
+implicit persistence. The public client declaration adds only `$clicks` and
+`$clicksContext.clicksStart`, verified against the installed client and browser tests.
+
+Vue Motion owns opacity/transform interpolation; CSS owns highlight, path drawing and
+stagger. Reduced-motion changes stop active interpolation and disable CSS animation.
+Static props and native print mode bypass animation. All reveal steps are shown in
+print, slider controls disappear, and comparison renders complete before/after images
+side by side. Chart detail tables are supplemental, so print retains the labeled SVG
+and legend and omits the expandable panel. Screenshot callers select the native print
+route for a complete static state. Live screenshots naturally capture the current step.
+
+ImageCompare extends the existing build-time literal asset validation to both image
+paths and requires descriptive alt strings and a caption in Markdown. Public-root
+paths are consistent with Figure. Source data remains text and the new artwork is SVG.

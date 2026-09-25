@@ -8,3 +8,5 @@
 
 @import 'katex/dist/katex.min.css';
 @import './theme/science.css';
+@import './theme/visualization.css';
+@import './theme/motion.css';

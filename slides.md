@@ -57,6 +57,62 @@ src: ./slides/13-steps.md
 ---
 
 ---
+src: ./slides/14-pipeline.md
+---
+
+---
+src: ./slides/15-architecture.md
+---
+
+---
+src: ./slides/16-timeline.md
+---
+
+---
+src: ./slides/17-bar.md
+---
+
+---
+src: ./slides/18-line.md
+---
+
+---
+src: ./slides/19-scatter.md
+---
+
+---
+src: ./slides/20-radar.md
+---
+
+---
+src: ./slides/21-matrix.md
+---
+
+---
+src: ./slides/21b-metric.md
+---
+
+---
+src: ./slides/22-reveal.md
+---
+
+---
+src: ./slides/23-motion.md
+---
+
+---
+src: ./slides/24-compare.md
+---
+
+---
+src: ./slides/25-static.md
+---
+
+---
+src: ./slides/26-qr.md
+---
+
+---
 src: ./slides/05-close.md
 ---
 

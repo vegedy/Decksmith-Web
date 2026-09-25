@@ -1,8 +1,8 @@
 # Decksmith Web
 
-A local Slidev template for technical talks. Phases 1–2 provide Markdown content,
+A local Slidev template for technical talks. Phases 1–3 provide Markdown content,
 Vue 3 layouts, strict TypeScript, scientific components, central citations, a light
-theme, static hosting and PDF export. Phase 3 visualizations remain planned.
+theme, reusable visualizations, controlled interaction, static hosting and PDF export.
 
 ## Start on Linux
 
@@ -205,7 +205,7 @@ Use `aligned` line breaks and optionally `compact` for long expressions, as in
 there is no automatic formula rasterization or unreadable shrink-to-fit.
 
 Use Slidev `v-click` on formula steps as in `slides/13-steps.md`. Slidev owns the
-click lifecycle and final PDF state; Phase 3 animation components are not introduced.
+click lifecycle and final PDF state; InteractiveReveal adds reusable motion presets.
 All other scientific components are stateless except Figure's native dialog: Escape,
 Close, clicking the dialog, or leaving the slide closes it. Re-entry starts closed.
 Zoom controls/dialogs are omitted from export. Code focus and glossary definitions
@@ -230,3 +230,59 @@ slide paper size. Print the appendix separately at port 3031 if required; the st
 PDF command combines it automatically. `output/smoke/browser-print.pdf` exercises the
 native print route during browser tests. Review PDFs visually after content changes;
 text/font assertions are regression signals, not a full visual fidelity proof.
+
+## Visualization and interaction (Phase 3)
+
+All new components are additive; Phase 1–2 public contracts remain unchanged.
+Data types live in `types/visualization.ts`. Components accept plain data, never
+fetch resources, and render semantic HTML or SVG. Keep labels short and split dense
+data across slides; the smoke checks reject showcase overflow.
+
+| Component             | Required props                                                                                                     | Optional props / behavior                                                                                                                                                                                                                                                                                                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MetricCard`          | `label`, `value: string \| number`, `interpretation`                                                               | `unit`, `trend` are visible text, not color-only indicators.                                                                                                                                                                                                                                                                                                                                  |
+| `ComparisonTable`     | `caption`, `columns: { key, label }[]`, `rows: { label, values: Record<string, string \| number> }[]`              | Missing cells show an em dash; headers use semantic scopes.                                                                                                                                                                                                                                                                                                                                   |
+| `PipelineDiagram`     | `label`, `steps: { id, label, detail? }[]`                                                                         | Ordered HTML nodes and directional connectors.                                                                                                                                                                                                                                                                                                                                                |
+| `ArchitectureDiagram` | `label`, `nodes: { id, label, detail?, x, y }[]`, `edges: { from, to, label }[]`                                   | `boundaries: { id, label, x, y, width, height }[] = []`, `legend`, `width = 800`, `height = 260`. Coordinates are SVG units; nodes are 120×46 centered at x/y. Arrange nodes to leave room for edge labels; unknown endpoints fail. Dashed labeled rectangles denote trust boundaries.                                                                                                        |
+| `Timeline`            | `label`, `events: { id, date, label, detail? }[]`                                                                  | Dates are display strings; order follows input.                                                                                                                                                                                                                                                                                                                                               |
+| `ProcessSteps`        | `label`, `steps: { id, label, detail? }[]`                                                                         | `sequential = false`, `startAt = 1`; sequential mode uses native Slidev clicks.                                                                                                                                                                                                                                                                                                               |
+| `Chart`               | `type: 'bar' \| 'line' \| 'scatter' \| 'radar'`, `title`, `series: { name, points: { x, y, label, detail? }[] }[]` | `xLabel`, `yLabel`, `details = false`. Finite values required. Line/scatter use numeric x; bars follow input order, support negative values and a zero baseline. Radar requires matching labels/order, at least three nonnegative axes, and uses a shared zero-based scale. SVG labels/legends persist in PDF; optional native tooltips and a keyboard-accessible data table supplement them. |
+| `ConfusionMatrix`     | `caption`, `labels: string[]`, `values: number[][]`                                                                | `details = true` adds native cell tooltips. Matrix must be square, finite, nonnegative; rows are actual, columns predicted. Counts, axis labels and shade legend remain visible.                                                                                                                                                                                                              |
+| `QrLink`              | `href`, `label`                                                                                                    | Absolute HTTP(S)/mailto URL; generates SVG locally with a four-module quiet zone. Human-readable URL is always included. Opening the link may require internet; rendering never does.                                                                                                                                                                                                         |
+| `InteractiveReveal`   | Default slot                                                                                                       | `at = 1` (absolute positive Slidev click), `motion = 'fade'`, `static = false`, `controls = true`. Reset steps returns the whole slide to its native `clicksStart`.                                                                                                                                                                                                                           |
+| `ImageCompare`        | `before`, `after`, `beforeAlt`, `afterAlt`, `caption`                                                              | `beforeLabel = 'Before'`, `afterLabel = 'After'`, `initial = 50` (clamped to 0–100), `static = false`. Paths must be literal `/images/...` assets in Markdown. Both images should use the same aspect ratio. Keyboard slider and Reset comparison; PDF/static shows both complete images side by side.                                                                                        |
+
+Example (blank lines allow Markdown inside a slot):
+
+```md
+<InteractiveReveal :at="1" motion="slide-up">
+
+Evidence first; the final export preserves this explanation.
+
+</InteractiveReveal>
+```
+
+Motion presets are `fade`, `slide-up`, `slide-left`, `scale-in`, `highlight`,
+`draw-path`, and `stagger`, in `lib/motion.ts` and `theme/motion.css`. Vue Motion
+animates transforms/opacity; CSS handles highlight, normalized SVG paths and stagger.
+For draw-path, set `pathLength="1"` on each SVG path. Stagger acts on direct slot
+children. Durations use `--duration-base` / `--duration-slow` in milliseconds;
+`--motion-stagger` controls delays. Reduced-motion preferences, including changes
+while presenting, stop transform animation and CSS effects; clicks remain usable.
+Animation carries no exclusive information. Use `static` for an always-visible
+reveal or comparison, and the native print route for screenshots of complete slides.
+
+Slidev owns click state: forward entry starts at the initial step; backward entry
+uses Slidev's final step, and direct URLs can select explicit click states. Reset
+steps and reverse navigation are deterministic. No component persists custom state
+across slides: image comparison returns to `initial`, chart details close, and motion
+follows the native click context. Print/export shows all reveal content, omits controls
+and details panels, and preserves both comparison images. Static hosting retains live
+interaction; PDF contains the meaningful final state without JavaScript.
+
+`slides/14-pipeline.md` through `slides/26-qr.md` cover the complete suite, including
+all four chart types, seven motions, a reduced-motion status indicator and explicit
+static fallbacks. `npm run test:smoke` checks the built main/appendix deck offline and
+browser printing; `npm run test:interaction` checks clicks, reset, keyboard comparison,
+slide re-entry, reduced motion and print final states. Both are in `npm run check`.
+`npm run test:foundation` remains a compatible alias for the general smoke check.

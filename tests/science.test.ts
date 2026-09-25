@@ -40,6 +40,14 @@ test('collection is stable, deduplicated, separates assets and resolves forward 
 test('invalid references, equations, dynamic keys and missing figures fail with diagnostics', () => {
   for (const [content, message] of [
     ['<Cite id="missing" />', /Unknown reference/],
+    [
+      '<ImageCompare before="/missing.svg" after="/missing.svg" before-alt="Before" after-alt="After" caption="Comparison" />',
+      /Missing image/,
+    ],
+    [
+      '<ImageCompare :before="dynamic" after="/images/documents.svg" />',
+      /literal attributes/,
+    ],
     ['<source-footer ids="missing" />', /Unknown reference/],
     ['<EquationRef id="missing" />', /Unknown equation/],
     ['<Equation id="eq" /><Equation id="eq" />', /duplicate equation/],

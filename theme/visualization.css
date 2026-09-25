@@ -1,0 +1,323 @@
+@layer layout {
+  .visualization {
+    margin: var(--space-2) 0;
+    font-size: var(--text-sm);
+  }
+  .visualization figcaption,
+  .visualization caption {
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+  }
+  .visualization p {
+    margin: var(--space-1) 0;
+  }
+  .visual-detail {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .metric-card {
+    padding: var(--space-2);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius);
+  }
+  .metric-value {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+  .metric-value small {
+    font-size: var(--text-sm);
+  }
+  .visualization table,
+  table.visualization {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .visualization th,
+  .visualization td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-text-muted);
+    text-align: left;
+  }
+  .pipeline ol,
+  .timeline ol {
+    display: flex;
+    gap: 30px;
+    padding: 0;
+    list-style: none;
+  }
+  .timeline ol {
+    margin-bottom: 0;
+  }
+  .timeline li {
+    margin-bottom: 0;
+  }
+  .pipeline li,
+  .timeline li {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    padding: 16px;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius);
+  }
+  .pipeline li:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -25px;
+    top: 30px;
+  }
+  .step-number {
+    display: block;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  .timeline li {
+    border-width: 3px 0 0;
+    border-radius: 0;
+  }
+  .timeline li > span {
+    display: block;
+  }
+  .process-steps h2 {
+    font-size: var(--text-base);
+  }
+  .process-steps li {
+    margin: 12px 0;
+  }
+  .architecture svg,
+  .chart svg {
+    display: block;
+    width: 100%;
+    color: var(--color-primary);
+  }
+  .chart svg {
+    height: 250px;
+  }
+  .architecture text,
+  .chart text {
+    font: 18px var(--font-sans);
+    fill: var(--color-text);
+    stroke: none;
+  }
+  .chart text {
+    font-size: 21px;
+  }
+  .trust-boundary rect {
+    fill: none;
+    stroke: var(--color-text-muted);
+    stroke-width: 2;
+    stroke-dasharray: 7 5;
+  }
+  .architecture-node rect {
+    fill: var(--color-canvas);
+    stroke: var(--color-primary);
+    stroke-width: 2;
+  }
+  .data-flow path,
+  .chart-axis {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+  .data-flow text {
+    paint-order: stroke;
+    stroke: var(--color-canvas);
+    stroke-width: 5px;
+  }
+  .series-0 {
+    color: var(--color-primary);
+  }
+  .series-1 {
+    color: var(--chart-secondary);
+  }
+  .series-2 {
+    color: var(--chart-tertiary);
+  }
+  .series-3 {
+    color: var(--color-text);
+  }
+  .chart-series {
+    fill: currentColor;
+    stroke: currentColor;
+  }
+  .chart-line {
+    fill: none;
+    stroke-width: 3;
+  }
+  .chart-legend {
+    display: flex;
+    gap: 0 20px;
+    flex-wrap: wrap;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  .chart-legend li {
+    margin: 0;
+  }
+  .chart-details {
+    position: relative;
+  }
+  .chart-details[open] {
+    position: absolute;
+    inset: 100px 56px 70px;
+    overflow: auto;
+    z-index: 20;
+    padding: 16px;
+    background: var(--color-canvas);
+    border: 2px solid var(--color-primary);
+  }
+  .chart-details summary {
+    cursor: pointer;
+  }
+  .matrix-scale {
+    display: inline-block;
+    width: 80px;
+    height: 15px;
+    background: linear-gradient(
+      to right,
+      var(--color-canvas),
+      color-mix(in srgb, var(--color-primary) 30%, var(--color-canvas))
+    );
+    border: 1px solid var(--color-text-muted);
+  }
+  .compare-images {
+    position: relative;
+    height: 220px;
+  }
+  .compare-images > div:not(.compare-divider) {
+    position: absolute;
+    inset: 0;
+    background: var(--color-canvas);
+  }
+  .compare-images img {
+    width: 100%;
+    height: 190px;
+    display: block;
+  }
+  .compare-images span {
+    display: block;
+    text-align: center;
+  }
+  .image-compare:not(.compare-static) .compare-images span {
+    visibility: hidden;
+  }
+  .compare-divider {
+    position: absolute;
+    height: 100%;
+    border-left: 3px solid var(--color-primary);
+    pointer-events: none;
+  }
+  .interaction-controls {
+    font-size: var(--text-sm);
+    margin-top: 12px;
+  }
+  button.interaction-controls,
+  .interaction-controls button {
+    padding: 4px 12px;
+    border: 1px solid currentColor;
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+  .interaction-controls input {
+    display: block;
+    width: 100%;
+    accent-color: var(--color-primary);
+  }
+  .compare-static .compare-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .compare-static .compare-images > div {
+    position: static;
+  }
+  .qr-link {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .qr-link svg {
+    width: 170px;
+    height: 170px;
+    flex-shrink: 0;
+  }
+  .qr-link figcaption {
+    overflow-wrap: anywhere;
+  }
+  .motion-status::after {
+    content: 'Motion enabled; all content is available using Slidev steps.';
+  }
+}
+@layer tokens {
+  :root {
+    --chart-secondary: #9a3919;
+    --chart-tertiary: #256345;
+    --motion-distance: 20px;
+    --motion-stagger: 80ms;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-status::after {
+    content: 'Reduced motion active; steps appear instantly.';
+  }
+}
+@layer print {
+  html.print .interaction-controls,
+  html.print .chart-details {
+    display: none !important;
+  }
+  @media print {
+    .interaction-controls,
+    .chart-details {
+      display: none !important;
+    }
+    .compare-images {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .compare-images > div:not(.compare-divider) {
+      position: static !important;
+      clip-path: none !important;
+    }
+    .compare-images span {
+      visibility: visible !important;
+    }
+    .compare-divider {
+      display: none !important;
+    }
+  }
+}
+@layer layout {
+  .motion-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+  .motion-showcase p {
+    margin: var(--space-1) 0;
+  }
+  .motion-showcase > :last-child {
+    grid-column: 1 / -1;
+  }
+  .motion-showcase svg {
+    display: block;
+    height: 55px;
+  }
+}
+
+@layer print {
+  html.print .motion-status::after {
+    content: 'Static export: all explanation steps are visible.';
+  }
+  @media print {
+    .motion-status::after {
+      content: 'Static export: all explanation steps are visible.';
+    }
+  }
+}

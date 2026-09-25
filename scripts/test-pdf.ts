@@ -64,6 +64,27 @@ if (data.slides.some((s) => s.content.includes('id="entropy"'))) {
     'Unused bibliography entry leaked into PDF',
   )
 }
+if (data.slides.some((s) => s.content.includes('Controlled explanation'))) {
+  for (const expected of [
+    'Then state the conclusion',
+    'Trusted local device',
+    'Protocol',
+    'Illustrative accuracy',
+    'Illustrative error',
+    'Illustrative latency',
+    'Illustrative assessment',
+    'Actual',
+    'Reviewed',
+    'Static fallback',
+    'https://sli.dev/',
+  ])
+    assert.ok(
+      text.includes(expected),
+      `Missing visualization PDF content: ${expected}`,
+    )
+  for (const chrome of ['Reset steps', 'Reset comparison', 'Data details'])
+    assert.ok(!text.includes(chrome), `Interactive chrome in PDF: ${chrome}`)
+}
 console.log(
   `PDF regression passed: ${data.slides.length} slides, selectable scientific content and local math fonts.`,
 )

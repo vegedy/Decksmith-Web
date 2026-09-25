@@ -1,0 +1,76 @@
+@layer layout {
+  .interactive-reveal[data-active='true'][data-instant='false'][data-motion='highlight']
+    .motion-target {
+    animation: deck-highlight var(--duration-slow) var(--ease-standard);
+  }
+  .interactive-reveal[data-active='true'][data-instant='false'][data-motion='draw-path']
+    .motion-target
+    path {
+    stroke-dasharray: 1;
+    animation: deck-draw var(--duration-slow) var(--ease-standard);
+  }
+  .interactive-reveal[data-active='true'][data-instant='false'][data-motion='stagger']
+    .motion-target
+    > * {
+    animation: deck-stagger var(--duration-base) both;
+    animation-delay: calc(var(--motion-stagger) * var(--motion-index, 0));
+  }
+  @keyframes deck-highlight {
+    from {
+      background: color-mix(in srgb, var(--color-primary) 25%, transparent);
+    }
+    to {
+      background: transparent;
+    }
+  }
+  @keyframes deck-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes deck-stagger {
+    from {
+      opacity: 0;
+      transform: translateY(var(--motion-distance));
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+/* Inline Vue Motion transforms must never hide content in static output. */
+@layer print {
+  html.print .reveal-gate,
+  html.print .motion-target {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+  html.print .motion-target,
+  html.print .motion-target * {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  @media print {
+    .reveal-gate,
+    .motion-target {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+    .motion-target,
+    .motion-target * {
+      animation: none !important;
+      stroke-dashoffset: 0 !important;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-target {
+    transform: none !important;
+  }
+}
