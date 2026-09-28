@@ -357,3 +357,33 @@ reduced-motion users can follow the same sequence. The speech wording is preserv
 `vortrag.md` now has visible slide-change cues before each slide's speaking segment.
 Browser and export visual evidence must be repeated when Chromium is
 available; the current environment blocks its installation.
+
+## DEC-19 · Speech-to-slide alignment (2026-09-28)
+
+The user made `vortrag.md` the content source of truth and chose a strict match
+between each slide's visible content and the speech between its marker and the
+next. This supersedes DEC-17's byte-for-byte speech preservation for the current
+revision. The original remains available in Git history. Fourteen main slides,
+900 seconds and the separate four-page appendix remain.
+
+- Slide 3 defines the three quality goals without previewing their implementation.
+  Slide 4 introduces the regional Kafka intake and both paths; slide 5 contains
+  the edge agent only. The speech's misplaced slide-5 regional and path overview
+  moves to slide 4. KRaft appears with cloud-native operation on slide 13.
+- Slides 6–9 distinguish Spark's clean-event output from report aggregates,
+  continuous regional-to-central replication from nightly feature jobs, and
+  introduce Kafka Connect and the model-training workflow where spoken.
+- The speech now treats p99 latency, replication, retention, and reliability as
+  targets or assumptions. Cassandra is a wide-column serving store; model
+  reproducibility needs versioned data, code and environment. CAP describes the
+  strong-consistency/availability conflict during a partition, without an
+  architecture-wide AP label. Asynchronous transfer may yield different data
+  states; convergence requires successful replay.
+- Slide 12 presents planned operating measures. Testing and proof of those
+  measures remain on the conclusion slide. The removed slide-13 MLOps diagram
+  also leaves seven original figures in the appendix index.
+
+Slide text and notes remain summaries rather than a verbatim transcript. Technical
+details too dense for projection stay in notes. The old validation record's
+historical source hashes and prior passing exports do not establish validation
+for this revision.

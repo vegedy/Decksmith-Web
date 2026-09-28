@@ -262,3 +262,11 @@ talk. The 14-slide / 900-second structure remains; the speech now has explicit
 slide-change cues without changes to its spoken words.
 Build and static checks pass; browser/PDF verification requires Chromium, which is
 unavailable in the current environment (the Playwright download was blocked).
+
+**Speech and slide alignment (2026-09-28):** The 14 markers now delimit the topics
+shown on each active slide. The speech moves its regional overview to slide 4,
+keeps the edge agent on slide 5, and introduces the central path and model
+training on slides 8–9. Slides 3, 8, 12 and 13 no longer reveal later material.
+Targeted corrections align CAP, Cassandra, latency goals, clean events versus
+aggregates, and training reproducibility with the slides. DEC-19 records the
+new source-of-truth policy; validation evidence is in `docs/VALIDATION.md`.

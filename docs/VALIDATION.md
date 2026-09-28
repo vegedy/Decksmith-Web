@@ -436,3 +436,23 @@ an environment with a TypeScript-enabled Node build and Chromium before presenti
 slide 7 splits one paragraph after the regional clean-topic output; the spoken
 wording is otherwise untouched. The earlier byte-for-byte SHA-256 comparison above
 describes the original talk implementation before this authorized annotation.
+
+### Speech and slide alignment · 2026-09-28
+
+DEC-19 supersedes the earlier claim that `vortrag.md` still has its original
+wording. Its 14 marked segments were checked against the active numbered slides.
+The edge-agent segment no longer contains later regional and batch details.
+The slides introduce the clean stream, central replication, Kafka Connect,
+forecast training, operating measures and CAP in the same order as the speech.
+The spoken CAP, Cassandra, latency and reproducibility passages received targeted
+factual corrections. The main deck remains 14 slides and 900 seconds; the PDF
+contains four appendix pages.
+
+`npm run check` passes on Node 26.10.0 (exit 0), including type checking, lint,
+formatting, unit tests, production build, browser smoke and interaction checks,
+reference and asset validation, PDF regression, accessibility, packaging and
+all theme variants. The current Chromium environment resolves the browser and
+export limitation noted above. Final-state PNGs for changed slides 3–9 and
+11–14 were inspected for content order, text fit, figures, citations and footer
+spacing. PDF page 11 was inspected after the CAP reveal order changed. This is
+screen/export evidence; the physical projector check D-05 remains open.

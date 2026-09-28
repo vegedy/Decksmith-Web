@@ -18,6 +18,5 @@ appendix: true
 | 5 | 8 | Zentrale Replikation | Kafka |
 | 6 | 9 | Data-Lake-Zonen und Features | Airflow, Spark |
 | 7 | 11 | Verzögerte zentrale Übernahme | Gilbert / Lynch, Kafka |
-| 8 | 13 | Erweiterungen und MLOps | Kafka, MLflow |
 
 <p class="kd-note">Eigene Darstellungen · Benito Zenz, 2026 · Konzeptioneller Entwurf, keine Messergebnisse.</p>

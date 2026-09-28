@@ -15,15 +15,18 @@ Kassenereignissen über regionale Kafka- und Spark-Datenpfade zu Dashboards sowi
 zu einem zentralen Data Lake und ML-Pipelines. Zuverlässigkeit, Skalierbarkeit,
 Wartbarkeit und die Grenzen der angestrebten Latenz werden dabei eingeordnet.
 
-Das Hauptdeck enthält **14 Folien / 15 Minuten**. `slides/kassendaten/` enthält Folien, Sprechernotizen und
-`timeBudget` in Sekunden. `vortrag.md` enthält den ursprünglichen Sprechtext mit
-eingefügten Folienwechsel-Markern; der Wortlaut ist unverändert. Die Datei ist
-gezielt von Prettier ausgenommen. Fachliche Präzisierungen gegenüber dem
-Sprechtext stehen in den Notizen und DEC-17. Der Stand 27.09.2026 ist kein Vortragstermin.
+Das Hauptdeck enthält **14 Folien / 15 Minuten**. `slides/kassendaten/` enthält
+Folien, Sprechernotizen und `timeBudget` in Sekunden. `vortrag.md` ist die
+inhaltliche Vorlage mit Folienwechsel-Markern. Für die Übereinstimmung mit dem
+Deck wurden Abschnitte passend zu den Markern verschoben und einzelne
+fachliche Aussagen präzisiert (DEC-19). Die Datei ist gezielt von Prettier
+ausgenommen. Der Stand 27.09.2026 ist kein Vortragstermin.
 Die Hauptfolien bauen Kennzahlen, Verarbeitungsschritte, Tabellenzeilen und
 Schlussfolgerungen mit Slidev-Klicks auf. Rechts-/Linkspfeil gehen vor und zurück;
 beim Betreten einer Folie von vorn beginnt sie mit dem ersten Gedanken. PDF und
-PNG zeigen den vollständigen Endzustand.
+PNG zeigen den vollständigen Endzustand. Die aktuelle Fassung wurde mit
+Chromium, PDF/PNG-Export und `npm run check` geprüft; Details stehen in
+`docs/VALIDATION.md`.
 
 - Konfiguration: `deck.config.ts`; Bibliografie: `data/kassendaten-references.yaml`.
 - Hauptdeck: `http://localhost:3030`; Quellenanhang: `http://localhost:3031`.

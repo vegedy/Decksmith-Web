@@ -18,8 +18,8 @@ Spitzenzeiten jede Sekunde schätzungsweise bis zu 20.000 Kassen-Events anfallen
 die wir verarbeiten wollen.
 
 Dabei sollen die Dashboards für die lokalen Berichte möglichst aktuell sein,
-sagen wir p99 < 10 s bei einer Verfügbarkeit von 99,9 %. Der Verlust verlorener
-Events soll gegen 0 gehen.
+sagen wir p99 < 10 s bei einer Verfügbarkeit von 99,9 %. Der Verlust von
+Events soll gegen 0 gehen. Das sind Entwurfsziele, keine gemessenen Werte.
 
 ## Grundprinzipien
 
@@ -47,10 +47,15 @@ viel Arbeit sparen.
 
 Sehen wir uns an, wie wir eine solche Architektur gestalten können.
 
-Als Quelle der Wahrheit verwenden wir einen Apache Kafka Stream, aus dem sowohl
-die Echtzeit-Filialberichte als auch die Batch-Abfragen für die
-Nachfrageprognosen gezogen werden. Jede Filiale hat einen Kafka-Producer, der an
-einen regionalen Kafka-Cluster streamt.
+Als Quelle der Wahrheit für die Auswertung verwenden wir den Kafka-Ereignisstrom.
+Aus ihm entstehen sowohl die Echtzeit-Filialberichte als auch die Daten für die
+spätere Nachfrageprognose. Jede Filiale sendet ihre Ereignisse an einen
+regionalen Kafka-Cluster.
+
+APAC, EMEA und AMER bilden drei Regionen mit gleichem Aufbau. In jeder Region
+empfängt ein Kafka-Cluster mit drei Brokern die Nachrichten der Filialen. Von
+dort führen zwei Wege weiter: ein regionaler Pfad für zeitnahe Filialberichte
+und ein zentraler Pfad für historische Analysen und Prognosen.
 
 **▶ Folie 05 · Edge-Agent und lokaler Puffer**
 
@@ -64,77 +69,60 @@ regionalen Kafka-Cluster nach. Eindeutige Event-IDs und Deduplizierung begrenzen
 Doppelzählungen und die Reihenfolge wird pro Kafka-Partition erhalten. Als
 Technologie bietet sich dabei Kafka-Producer mit lokaler Datei-Queue an.
 
-Jeden der drei üblichen Weltwirtschaftsräume definieren wir als eigene Region,
-also APAC, EMEA und AMER. Diese Regionen sind strukturell aber gleich aufgebaut.
-In jeder Region erhält ein Kafka-Cluster (bestehend aus je drei Brokern)
-Nachrichten von den Kafka-Producern aus den Filialen der Region.
-Da wir eine moderne Version von Kafka verwenden, sind wir nicht länger auf
-Zookeeper als externen Service angewiesen. Stattdessen wird der KRaft-Modus
-verwendet.
-
-An dem Punkt spalten sich zwei Pfade ab, nämlich der Echtzeit-Pfad und der
-Batch-Pfad.
-
-Der Echtzeit-Pfad verarbeitet die Daten, sobald sie reinkommen. Er
-pseudonymisiert sie und bereitet sie für das Dashboard der Filialleitung vor.
-
-Der Batchpfad läuft jede Nacht und sammelt die vom Echtzeit-Pfad
-pseudonymisierten Daten zentral. Sie werden dann regionenübergreifend
-gesammelt und für die ML-Pipelines vorbereitet.
-
-
 ## Echtzeit- und Batchpfad
-
-Ich möchte diese beiden Abläufe technisch genauer beschreiben:
 
 **▶ Folie 06 · Spark bereinigt regional**
 
-Für die Echtzeit-Verarbeitung werden vom regionalen Kafka-Cluster die Daten
-mittels Spark Structured Streaming geprüft, Duplikate entfernt, Kundenkarten-IDs
-pseudonymisiert und aggregiert.
+Ich möchte diese beiden Abläufe technisch genauer beschreiben:
 
-Spark Structured Streaming prüft, bereinigt und aggregiert die Daten. Die
-bereinigten und pseudonymisierten Daten werden zurück in den regionalen
-Kafka-Cluster nach `pos.transactions.clean` geschrieben.
+Der Echtzeit-Pfad verarbeitet die Ereignisse, sobald sie ankommen. Spark
+Structured Streaming prüft die Daten aus dem regionalen Kafka-Cluster,
+entfernt Duplikate und pseudonymisiert Kundenkarten-IDs. Die bereinigten,
+pseudonymisierten Ereignisse schreibt Spark in das regionale Topic
+`pos.transactions.clean`. Daneben berechnet Spark Aggregate für die
+Filialberichte. Der Clean-Strom und diese Aggregate sind unterschiedliche
+Ausgaben.
 
 **▶ Folie 07 · Aggregate für Filialberichte**
 
-Dann müssen die
-Zusammenfassungen aber auch für die Filialleitung abrufbar sein. Dafür schreibt
-Spark die fertigen Aggregate kontinuierlich in Apache Cassandra.
+Dann müssen die Zusammenfassungen aber auch für die Filialleitung abrufbar
+sein. Dafür schreibt Spark die fertigen Aggregate kontinuierlich in Apache
+Cassandra.
 
-Cassandra ist ein spaltenorientierter Serving-Store, der für sehr hohe
+Cassandra ist ein Wide-Column-Serving-Store, der für sehr hohe
 Schreibraten und Punktabfragen (z.B. "alle Umsätze der Filiale X von heute")
 optimiert ist. Das ist genau das, was ein Dashboard braucht. Die Filialleitung
 ruft die Daten dann über eine Reporting-API ab, die die Kennzahlen aus
 Cassandra liest und im Dashboard anzeigt. Die Latenz vom Kassiervorgang bis zur
-Anzeige liegt bei bestehender Netzwerk-Verbindung bei etwa 5–10 Sekunden.
+Anzeige soll bei bestehender Netzwerk-Verbindung für 99 Prozent der betrachteten
+Ereignisse unter zehn Sekunden liegen. Das muss später gemessen werden.
 
 **▶ Folie 08 · Pseudonymisierten Clean-Strom replizieren**
 
-Parallel zum Echtzeitpfad läuft der Batchpfad. Dafür nutzen wir nicht die
-Rohdaten, sondern das bereits bereinigte und pseudonymisierte Topic, das Spark
-im Echtzeitpfad erzeugt hat. Spark hat die Daten nämlich in das Topic
-`pos.transactions.clean` zurückgeschrieben. Mit Kafka MirrorMaker 2 wird dieses
-Topic dann asynchron in den zentralen Kafka-Cluster repliziert. So stellen wir
-sicher, dass nur pseudonymisierte Daten die Region verlassen.
+Der zentrale Pfad beginnt mit kontinuierlicher Replikation. Dafür nutzen wir
+keine Rohdaten, sondern das bereinigte und pseudonymisierte Topic
+`pos.transactions.clean` aus dem Echtzeitpfad. Kafka MirrorMaker 2 repliziert
+dieses Topic asynchron in den zentralen Kafka-Cluster. Wir beschränken die
+Replikation auf pseudonymisierte Clean-Topics, damit keine Rohdaten die Region
+verlassen. Diese Regel müssen Topic-Filter und Zugriffsrechte absichern.
 
-**▶ Folie 09 · Nächtliche Prognose-Features**
+**▶ Folie 09 · Vom Ereignisstrom zur Nachfrageprognose**
 
 Vom zentralen Kafka-Cluster werden die Daten über Kafka Connect in den Data Lake
 geschrieben. Da nutzen wir einen S3-Objektspeicher im Parquet-Format. Der Data
 Lake ist in drei Zonen gegliedert: landing, clean und curated. Jede Nacht startet
 Apache Airflow einen Workflow, der Spark-Batch-Jobs anstößt. Wir verwenden der
 Einfachheit halber wieder Spark, wie schon im Echtzeitpfad. Diese erzeugen aus
-den Rohdaten und externen Daten wie Feiertagen oder Wetterdaten die gewünschten
-Feature-Tabellen, zum Beispiel den Absatz pro Filiale, Artikel und Tag. Diese
-Tabellen sind dann die Grundlage für die Nachfrageprognose.
+den bereits pseudonymisierten Eingangsdaten und externen Daten wie Feiertagen
+oder Wetterdaten die gewünschten Feature-Tabellen, zum Beispiel den Absatz pro
+Filiale, Artikel und Tag. Diese Tabellen sind dann die Grundlage für die
+Nachfrageprognose.
 
 Die Data Scientists greifen auf diese Feature-Tabellen zu, explorieren die Daten
 in Jupyter und trainieren ihre Nachfrageprognose-Modelle. Das Training läuft in
-Kubeflow-Pipelines ab, MLflow versioniert die Modelle. So ist jeder
-Trainingsschritt reproduzierbar. Optional können die fertigen Prognosen über ein
-Kafka-Topic zurück an die Filialen gehen.
+Kubeflow-Pipelines ab, MLflow dokumentiert Läufe und Modelle. Mit versionierten
+Daten, Code und Umgebungen können wir das Training reproduzieren. Optional
+können die fertigen Prognosen über ein Kafka-Topic zurück an die Filialen gehen.
 
 **▶ Folie 10 · OLTP und OLAP trennen**
 
@@ -161,24 +149,27 @@ Kassiervorgang entkoppelt.
 
 **▶ Folie 11 · Asynchrone Replikation und Datenstände**
 
-Nach dem CAP-Theorem kann ein verteilter Speicher nur zwei der drei
-Eigenschaften Konsistenz (C), Verfügbarkeit (A) und Ausfalltoleranz (P)
-garantieren. Da die Kassen nicht warten können, haben wir uns in unserer
-Architektur für Verfügbarkeit und Ausfalltoleranz entschieden (AP).
-Das ist daran erkennbar, dass die Filialen stets nur in ihre Region schreiben
-und es keine globalen, synchronen Transaktionen gibt. Die Synchronisation in die
-zentrale Analystics-Platform findet asynchron statt, daher handelt es sich um
-evantual consistency.
+Das CAP-Theorem beschreibt einen Konflikt während einer Netzpartition: Ein
+verteilter Speicher kann dann nicht gleichzeitig starke Konsistenz und
+Verfügbarkeit für dieselbe Operation garantieren. Es ist keine pauschale Wahl
+von zwei Eigenschaften für unsere gesamte Architektur.
 
-**▶ Folie 12 · Betriebsmaßnahmen und Nachweise**
+Die Filialen schreiben in ihre Region; globale synchrone Transaktionen sind
+nicht Teil dieses Entwurfs. Das Clean-Topic wird asynchron zur zentralen
+Analyseplattform repliziert. Deshalb können der regionale Bericht und der
+zentrale Datenstand zeitweise voneinander abweichen. Nach erfolgreicher
+Nachlieferung können sie sich wieder annähern. Die Garantien der einzelnen
+Speicher und Operationen müssen wir gesondert prüfen.
 
-Die geplante Architektur ist sowohl zuverlässig als auch skalierbar und wartbar.
+**▶ Folie 12 · Betriebsmaßnahmen für die Ziele**
 
-Zuverlässigkeit wird über folgende Maßnahmen sichergestellt: in jeder der drei
-Regionen sind die Daten über die drei Broker dreifach repliziert. Durch die
-Edge-Agent mit dem lokalen Puffer in jeder Filiale sind die Producer unabhängig
-vom aktuellen Netzwerkzustand. Zudem hält Kafka für sieben Tage und der Data
-Lake für 12 Monate die Daten zur weiteren Bearbeitung gespeichert.
+Die geplante Architektur soll zuverlässig, skalierbar und wartbar sein.
+
+Für Zuverlässigkeit planen wir in jeder Region drei Kafka-Broker und einen
+Replikationsfaktor von drei. Der lokale Puffer des Edge-Agents kann
+Verbindungsunterbrechungen überbrücken, solange seine Kapazität reicht. Kafka
+soll die Ereignisse sieben Tage und der Data Lake zwölf Monate vorhalten. Das
+sind Entwurfsannahmen, noch keine Garantie gegen Datenverlust.
 
 Die Skalierbarkeit wird insbesondere durch die horizontale Skalierung über
 Kafka-Partitionen und Consumer-Gruppen ermöglicht. Dass die Regionen je
@@ -192,27 +183,27 @@ ausgerollt. Und zudem monitoren wir Fehlerraten und Latenz-Perzentile.
 
 ## Zukunftstrends
 
-**▶ Folie 13 · Neue Anwendungen am Ereignisstrom**
+**▶ Folie 13 · Zukunftstrends im Daten- und Modellbetrieb**
 
 Ein aktueller Trend im Data Engineering ist die Zusammenführung von Stream- und
 Batch-Verarbeitung zu einem einheitlichen Modell, das nennt man dann
-"streaming-first". Unsere Architektur deckt das besonders gut ab, weil jedes
-Kassenereignis nur einmal in Kafka als replizierbarer Event-Log geschrieben
-wird. Von dieser einen Quelle aus versorgen wir dann den Echtzeitpfad für die
+"streaming-first". Unsere Architektur deckt das besonders gut ab, weil die
+Kassenereignisse als logischer Strom in regionalen Kafka-Logs landen. Von
+dieser Quelle aus versorgen wir dann den Echtzeitpfad für die
 Filialberichte und auch den Batchpfad für die zentralen Nachfrageprognosen. Und
 wenn später neue Anwendungsfälle dazukommen, müssen wir keine neuen
 Schnittstellen an den Kassen anlegen, sondern wir docken einfach eine weitere
 Consumer-Gruppe an Kafka an.
 
 Der Betrieb ist cloud-nativ gehalten, ein weiterer Trend im Data Engineering und
-der Software Entwicklung. Kafka läuft im KRaft-Modus ohne ZooKeeper und alle
-Komponenten können als Managed Services in der Cloud laufen, was den
-Betriebsaufwand senkt und die Skalierung vereinfacht. 
+der Software Entwicklung. Kafka läuft im KRaft-Modus ohne ZooKeeper. Geeignete
+Komponenten könnten als Managed Services in der Cloud laufen; ob das den
+Betriebsaufwand senkt, hängt von der konkreten Umsetzung ab.
 
-Die Bereitstellung von DataOps und DevOps Praktiken in Pipelines für
-maschinelles Lernen stellt einen Trend namens MLOps dar. Da wir
-Kubeflow-Pipelines und MLflow für die Nachfrageprognose-Modelle nutzen, steht
-dem nichts im Weg.
+Die Verbindung von Datenverarbeitung und Modellbetrieb nennen wir MLOps. Die
+genannten Kubeflow-Pipelines und MLflow unterstützen diesen Ansatz; für einen
+reproduzierbaren Betrieb brauchen wir zusätzlich versionierte Daten, Code und
+Umgebungen.
 
 ## Fazit
 
@@ -234,5 +225,4 @@ Mein Ergebnis ist deshalb kein Versprechen absoluter Echtzeit, sondern ein
 Kompromiss: geringe Latenz für die Filialen, getrennte analytische
 Verarbeitung und eine Architektur, die sich für neue Anforderungen
 weiterentwickeln lässt. Ob die gesetzten Ziele tatsächlich erreicht werden,
-müssten anschließend Last- und Ausfalltests zeigen.
-
+müssten anschließend Last-, Ausfall- und Wiederanlauftests zeigen.
