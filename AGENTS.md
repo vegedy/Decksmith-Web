@@ -1,5 +1,14 @@
 # Decksmith Web
 
+## Current branch context
+
+- The `data-engineering` branch contains the slides for Benito Zenz's talk
+  "Datensystem-Architektur für weltweite Kassendaten" (Aufgabenstellung 1).
+- Read the root `vortrag.md` for the speech and `slides/kassendaten/` for the active
+  deck. The talk proposes regional real-time reporting from checkout events and a
+  central batch path for demand forecasting. Preserve the speech text as an input;
+  `docs/DECISIONS.md` records factual clarifications made for the slides.
+
 ## Source of truth and scope
 
 - `docs/SPEC.md` is authoritative. Before implementation, read its relevant sections,

@@ -6,8 +6,16 @@ controlled interaction, offline hosting, PDF and PNG export, and emergency packa
 
 ## Aktueller Vortrag: Weltweite Kassendaten
 
-Das Hauptdeck enthält **14 Folien / 15 Minuten** für Benito Zenz,
-Aufgabenstellung 1. `slides/kassendaten/` enthält Folien, Sprechernotizen und
+Dieser Branch (`data-engineering`) enthält die Folien zum Vortrag
+**„Datensystem-Architektur für weltweite Kassendaten“** von Benito Zenz
+(Aufgabenstellung 1). Der Vortrag entwirft eine Architektur, die Kassendaten aus
+weltweiten Filialen für zeitnahe lokale Berichte und für zentrale, periodische
+Nachfrageprognosen nutzbar macht. Er erläutert den Weg von lokal gepufferten
+Kassenereignissen über regionale Kafka- und Spark-Datenpfade zu Dashboards sowie
+zu einem zentralen Data Lake und ML-Pipelines. Zuverlässigkeit, Skalierbarkeit,
+Wartbarkeit und die Grenzen der angestrebten Latenz werden dabei eingeordnet.
+
+Das Hauptdeck enthält **14 Folien / 15 Minuten**. `slides/kassendaten/` enthält Folien, Sprechernotizen und
 `timeBudget` in Sekunden. `vortrag.md` bleibt bytegenau als Eingabetext erhalten
 und ist gezielt von Prettier ausgenommen. Fachliche Präzisierungen gegenüber dem
 Sprechtext stehen in den Notizen und DEC-17. Der Stand 27.09.2026 ist kein Vortragstermin.
