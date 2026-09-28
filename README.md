@@ -19,6 +19,10 @@ Das Hauptdeck enthält **14 Folien / 15 Minuten**. `slides/kassendaten/` enthäl
 `timeBudget` in Sekunden. `vortrag.md` bleibt bytegenau als Eingabetext erhalten
 und ist gezielt von Prettier ausgenommen. Fachliche Präzisierungen gegenüber dem
 Sprechtext stehen in den Notizen und DEC-17. Der Stand 27.09.2026 ist kein Vortragstermin.
+Die Hauptfolien bauen Kennzahlen, Verarbeitungsschritte, Tabellenzeilen und
+Schlussfolgerungen mit Slidev-Klicks auf. Rechts-/Linkspfeil gehen vor und zurück;
+beim Betreten einer Folie von vorn beginnt sie mit dem ersten Gedanken. PDF und
+PNG zeigen den vollständigen Endzustand.
 
 - Konfiguration: `deck.config.ts`; Bibliografie: `data/kassendaten-references.yaml`.
 - Hauptdeck: `http://localhost:3030`; Quellenanhang: `http://localhost:3031`.
@@ -239,6 +243,7 @@ validate rendered images. Ordinary local image imports remain Vite-validated.
 | `CodeBlock`       | Default slot holds a native fenced block, rendered by Slidev/Shiki. Optional `filename`, `language` display labels, `lineNumbers: boolean = true`, `focus: number[] = []` (one-based lines). Fence language controls actual highlighting.              |
 | `Callout`         | `kind: 'definition' \| 'assumption' \| 'limitation' \| 'risk' \| 'insight'` (insight default), optional `title`; default slot holds content. Kind is text-labeled as well as colored.                                                                  |
 | `Takeaway`        | Optional `label = 'Takeaway'`; default slot is the core message.                                                                                                                                                                                       |
+| `PipelineDiagram` | Required `label` and `steps: DiagramStep[]`; optional `stepwise: boolean = false` reveals every step after the first through native Slidev clicks. Print/export displays all steps.                                                                    |
 | `GlossaryTerm`    | Required `term`, `definition`; optional reference `source`. Native title tooltip plus a permanently visible definition, including print and keyboard use.                                                                                              |
 
 Example:

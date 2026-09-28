@@ -255,3 +255,9 @@ restored showcase; all 18 PDF pages were visually reviewed. Validation is record
 in `docs/VALIDATION.md`. Remaining acceptance: physical projector
 review, formal comparison with the absent assignment/examination guide, and real
 architecture load/failure/recovery tests. These are not claims of this presentation.
+
+**Presentation pacing revision (2026-09-28):** Native Slidev click steps now reveal
+metrics, process steps, table rows and conclusions progressively across the active
+talk. The 14-slide / 900-second structure and the preserved speech input remain.
+Build and static checks pass; browser/PDF verification requires Chromium, which is
+unavailable in the current environment (the Playwright download was blocked).

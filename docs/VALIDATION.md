@@ -416,3 +416,16 @@ terminal period only when the original title has no terminal punctuation. This l
 the IBM question mark intact. `npm run check` passed again (exit 0), including all six
 theme/ratio variants. Browser slide 4 and PDF bibliography page 16 were inspected after
 the edit. The latest complete log is `output/kassendaten-validation/check.log`.
+
+### Presentation pacing revision · 2026-09-28
+
+The active talk now uses native Slidev click steps across slides 2–14, including
+optional stepwise rendering in `PipelineDiagram`. `vortrag.md`, the 14 slide entries
+and their 900-second total are unchanged. `npm run typecheck`, `npm run lint`,
+`npm run format:check` and `npm run build` passed after the change. The complete
+`npm run check` stopped at `npm test`: this system's Node 22.22.1 binary reports
+`ERR_NO_TYPESCRIPT` for `--experimental-strip-types`. Browser click inspection and
+PDF export remain unverified in this run: Chromium is absent and
+`npx playwright install chromium` was denied by the network with HTTP 403.
+Repeat the full check, live click/reverse review and PDF final-state inspection in
+an environment with a TypeScript-enabled Node build and Chromium before presenting.

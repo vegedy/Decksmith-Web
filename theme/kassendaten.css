@@ -125,6 +125,9 @@
   .kassendaten .pipeline li {
     padding: 12px;
   }
+  .kassendaten .pipeline li:has(+ li.slidev-vclick-hidden)::after {
+    visibility: hidden;
+  }
   .kassendaten .timeline li {
     padding: 12px 0;
   }

@@ -344,3 +344,15 @@ Interpretations required by the approved plan:
 
 Scope remains a presentation, not an implementation or benchmark of the proposed data
 platform. Physical projector evidence (D-05) remains open as in DEC-16.
+
+## DEC-18 · Progressive disclosure in the live talk (2026-09-28)
+
+The 14-slide, 900-second talk remains intact. Native Slidev `v-click` gates introduce
+one metric, principle, data-path stage, comparison row or conclusion at a time, aligned
+with the existing speaking order. `PipelineDiagram.stepwise` is an optional generic
+prop; the first step stays visible and each following step uses Slidev's click state.
+The default component state remains fully visible in existing decks. Print/PDF/PNG
+retain all content in the final state. No autoplay or extra motion is introduced, so
+reduced-motion users can follow the same sequence. The original `vortrag.md` remains
+unchanged. Browser and export visual evidence must be repeated when Chromium is
+available; the current environment blocks its installation.
