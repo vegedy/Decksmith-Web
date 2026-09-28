@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import deck from '../deck.config'
+const german = deck.meta.language === 'de'
 import { manifest, reference } from '../lib/science'
 const props = withDefaults(
   defineProps<{
@@ -38,9 +40,12 @@ const entries = computed(() =>
       "
     >
       <div>
-        {{ entry.authors?.join(', ') }} ({{ entry.year ?? 'n.d.' }}).
-        <strong>{{ entry.title }}</strong>
-        .
+        {{ entry.authors?.join(', ') }} ({{
+          entry.year ?? (german ? 'o. J.' : 'n.d.')
+        }}).
+        <strong>
+          {{ entry.title }}{{ /[.!?]$/.test(entry.title) ? '' : '.' }}
+        </strong>
       </div>
       <div v-if="entry.containerTitle || entry.publisher">
         {{ entry.containerTitle }} {{ entry.publisher }}
@@ -54,9 +59,11 @@ const entries = computed(() =>
         <a :href="entry.url">{{ entry.url }}</a>
       </div>
       <div v-if="entry.accessedAt || entry.license">
-        <span v-if="entry.accessedAt">Accessed {{ entry.accessedAt }}.</span>
+        <span v-if="entry.accessedAt">
+          {{ german ? 'Abgerufen am' : 'Accessed' }} {{ entry.accessedAt }}.
+        </span>
         <span v-if="entry.license" class="reference-license">
-          License: {{ entry.license }}.
+          {{ german ? 'Lizenz' : 'License' }}: {{ entry.license }}.
         </span>
       </div>
     </li>

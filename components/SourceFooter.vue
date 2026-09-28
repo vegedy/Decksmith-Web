@@ -12,11 +12,11 @@ const keys = computed(() => [
   <aside
     v-if="deck.display.showSourceFooters"
     class="source-footer"
-    aria-label="Sources"
+    :aria-label="deck.meta.language === 'de' ? 'Quellen' : 'Sources'"
   >
     <slot>
       <template v-for="(id, index) in keys" :key="id">
-        <span v-if="index">;</span>
+        <span v-if="index">{{ '; ' }}</span>
         <Cite :id="id" :citation-style="citationStyle" />
       </template>
     </slot>

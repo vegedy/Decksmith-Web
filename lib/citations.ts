@@ -8,9 +8,10 @@ export function formatCitation(
   entry: ReferenceEntry,
   style: CitationStyle,
   number: number,
+  language: 'de' | 'en' = 'en',
 ): string {
   if (style === 'numeric') return `[${number}]`
-  const authorYear = `${authorLabel(entry)}, ${entry.year ?? 'n.d.'}`
+  const authorYear = `${authorLabel(entry)}, ${entry.year ?? (language === 'de' ? 'o. J.' : 'n.d.')}`
   return style === 'short-footnote'
     ? `${number}. ${authorYear}, ${entry.title}`
     : `(${authorYear})`

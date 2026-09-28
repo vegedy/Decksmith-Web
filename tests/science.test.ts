@@ -2,7 +2,8 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { resolve } from 'node:path'
+import { resolve, dirname } from 'node:path'
+import deck from '../deck.config.ts'
 import {
   collectScience,
   scientificManifest,
@@ -106,9 +107,11 @@ test('native HTML figure/cite are not mistaken for Vue components', () => {
 test('entry loader validates imported slide references and missing imports', async () => {
   const root = mkdtempSync(resolve(tmpdir(), 'decksmith-science-'))
   try {
-    mkdirSync(resolve(root, 'data'))
+    mkdirSync(dirname(resolve(root, deck.citations.bibliographyFile)), {
+      recursive: true,
+    })
     writeFileSync(
-      resolve(root, 'data/references.yaml'),
+      resolve(root, deck.citations.bibliographyFile),
       '- {id: paper, type: article, title: Paper}',
     )
     writeFileSync(
@@ -127,4 +130,17 @@ test('entry loader validates imported slide references and missing imports', asy
   } finally {
     rmSync(root, { recursive: true, force: true })
   }
+})
+
+test('undated citations follow the requested language and preserve English defaults', () => {
+  const entry = refs[1]!
+  assert.equal(
+    formatCitation(entry, 'author-year', 1),
+    '(Example figure, n.d.)',
+  )
+  assert.equal(
+    formatCitation(entry, 'author-year', 1, 'de'),
+    '(Example figure, o. J.)',
+  )
+  assert.equal(formatCitation(entry, 'numeric', 1, 'de'), '[1]')
 })

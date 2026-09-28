@@ -106,3 +106,18 @@ not a substitute for this audit. [Component index](COMPONENTS.md) links editable
 | E-08  | Das Projekt muss einen Demo-/Smoke-Test enthalten.                                                        | verified                                  | 29 main showcase slides and linked appendix exercise formula/source/image/diagram/animation/interaction. `test:smoke`, `test:interaction`, build and PDF regressions pass.                                                                                                       |
 | E-09  | Externe Ressourcen müssen vermieden oder explizit gekennzeichnet werden.                                  | verified                                  | `scripts/resources.ts` and build hook reject literal remote runtime dependencies; resource negative fixtures pass, browser smoke independently blocks observed remote requests. Citation/QR hyperlinks allowed; computed unvisited branches not exhaustively proven.             |
 | E-10  | Das Deck muss ein Notfallpaket erzeugen können.                                                           | verified                                  | `scripts/export-emergency.ts`; test:packaging creates fresh site/PDF/instructions plus optional 30 PNGs and verifies copied site with blocked-network smoke. Latest directory is recorded in `output/latest-emergency.json`.                                                     |
+
+## Kassendaten content acceptance (2026-09-27)
+
+This authorized talk adds evidence without changing the historical framework matrix.
+
+| Concern                                             | Implementation / evidence                                                                                       |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| I-01–I-06: split content, metadata, notes, appendix | `slides.md`, `slides/kassendaten/01.md`–`14.md`, `appendix.md`; 900-second total                                |
+| Q-01–Q-09: sources and original figures             | `data/kassendaten-references.yaml`, frontmatter citations, paginated `ReferencesSlide`, `93-figures.md`; DEC-17 |
+| K-01, K-03, K-05–K-09, K-15, K-27                   | Existing typed components reused; optional ComparisonTable rowLabel preserves defaults                          |
+| D-01, D-02, D-04, D-08                              | Scoped `theme/kassendaten.css`, academic-light, local Inter, named regional/central paths                       |
+| I-07, IA-05, IA-06, E-01–E-06                       | Static diagrams and complete export states; PDF/PNG and browser evidence in `VALIDATION.md`                     |
+| A-03, A-04, E-08: retained showcase                 | `examples/showcase/`, unchanged showcase slides/assets, isolated restoration and full suite                     |
+| Input fidelity                                      | Exact `/vortrag.md` Prettier exclusion; SHA-256 comparison recorded in validation                               |
+| Open evidence                                       | D-05 physical projector; missing assignment/guide; operational targets require real platform tests              |

@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import type { ComparisonColumn, ComparisonRow } from '../types/visualization'
-defineProps<{
-  caption: string
-  columns: ComparisonColumn[]
-  rows: ComparisonRow[]
-}>()
+withDefaults(
+  defineProps<{
+    rowLabel?: string
+    caption: string
+    columns: ComparisonColumn[]
+    rows: ComparisonRow[]
+  }>(),
+  { rowLabel: 'Item' },
+)
 </script>
 <template>
   <table class="comparison-table visualization">
     <caption>{{ caption }}</caption>
     <thead>
       <tr>
-        <th scope="col">Item</th>
+        <th scope="col">{{ rowLabel }}</th>
         <th v-for="column in columns" :key="column.key" scope="col">
           {{ column.label }}
         </th>

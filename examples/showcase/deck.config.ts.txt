@@ -2,11 +2,12 @@ import type { DeckConfig } from './types/deck.ts'
 
 export default {
   meta: {
-    title: 'Weltweite Kassendaten',
-    subtitle: 'Lokale Berichte und globale Nachfrageprognosen',
-    author: 'Benito Zenz',
-    date: 'Stand: 27.09.2026',
-    language: 'de',
+    title: 'Ideas, clearly presented.',
+    subtitle: 'A local foundation for technical talks',
+    author: 'Your Name',
+    institution: 'Your Institution',
+    date: '2026-09-24',
+    language: 'en',
     version: '0.1',
   },
   display: {
@@ -15,7 +16,7 @@ export default {
     showSlideNumbers: true,
     showSourceFooters: true,
     defaultTheme: 'academic-light',
-    footer: 'Benito Zenz · Aufgabenstellung 1',
+    footer: 'Decksmith Web · Foundation',
     fonts: {
       sans: 'Inter Variable',
       mono: 'JetBrains Mono',
@@ -23,13 +24,10 @@ export default {
     },
   },
   export: {
-    pdfFileName: 'weltweite-kassendaten.pdf',
+    pdfFileName: 'decksmith-foundation.pdf',
     includeAppendix: true,
     renderFinalAnimationState: true,
     includeNotes: false,
   },
-  citations: {
-    style: 'author-year',
-    bibliographyFile: 'data/kassendaten-references.yaml',
-  },
+  citations: { style: 'author-year', bibliographyFile: 'data/references.yaml' },
 } as DeckConfig

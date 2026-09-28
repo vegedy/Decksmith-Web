@@ -244,3 +244,14 @@ conformance. README, plan, decisions and traceability match the delivered reposi
 - Minimum Node 22.12, camera QR scanning and arbitrary author content are outside this
   run's evidence. These limitations do not erase the successful Linux/Node 26 showcase
   checks, but must not be described as independently tested.
+
+## Authorized talk · Weltweite Kassendaten (2026-09-27)
+
+Implementation: 14 main slides, 900 seconds, 4 appendix slides, German metadata,
+original architecture drawings, citations, speaker notes and a preserved speech input.
+The showcase is archived and restorable; no new framework phase is started.
+**Status:** Implemented and validated. Full checks passed for the active deck and
+restored showcase; all 18 PDF pages were visually reviewed. Validation is recorded
+in `docs/VALIDATION.md`. Remaining acceptance: physical projector
+review, formal comparison with the absent assignment/examination guide, and real
+architecture load/failure/recovery tests. These are not claims of this presentation.

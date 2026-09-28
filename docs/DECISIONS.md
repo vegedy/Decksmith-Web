@@ -302,3 +302,45 @@ flat auto-registered component files, delimiter adaptation (DEC-03), typed pipel
 steps instead of the illustrative nodes/animated API (DEC-14), and a directory-based
 emergency package (DEC-13). None changes a mandatory acceptance criterion. No large
 refactor or feature expansion was necessary.
+
+## DEC-17 · Kassendaten as the active talk (2026-09-27)
+
+The user-authorized implementation replaces only the active content, preserving the
+framework and archived showcase entry files under `examples/showcase/`. No new phase
+or dependencies are introduced. Fourteen main slides total 900 seconds; four separate
+appendix slides join the PDF. The original `vortrag.md` is preserved byte for byte and
+excluded from formatting by its exact root path. Notes adapt the argument rather than
+claiming to reproduce the speech verbatim. Missing assignment and examination guidance
+prevent formal assessment; “Aufgabenstellung 1” comes from the speech. No institution
+or talk date is invented; the date explicitly denotes the creation stand.
+
+Interpretations required by the approved plan:
+
+- Sizes, p99 latency, availability, broker count, replication factor and retention are
+  assumptions/targets, not measurements or achieved guarantees. Availability is scoped
+  to the regional reporting path; measurement windows remain implementation work.
+- Continuous asynchronous replication precedes nightly feature computation. Central
+  landing data is already pseudonymized. The three lake zones are an original design.
+- Event IDs and deduplication mitigate double counting. Spark output guarantees depend
+  on the sink; no end-to-end exactly-once promise is made. Queue capacity, acknowledgments,
+  idempotency and late-data handling require concrete implementation decisions.
+- Cassandra is a wide-column serving store for prepared query patterns. It is neither
+  the checkout transaction store nor a conventional columnar OLAP database in this design.
+- CAP refers to the strong-consistency/availability conflict during a network partition.
+  The architecture receives no global “AP” label. Successful replay is a precondition
+  for eventual convergence; independent components retain their own guarantees.
+- The incomplete “Lyu, 1995” attribution remains unchanged in the input. The accessible
+  Introduction chapter is cited separately without inventing a year. Undated web
+  documents use “o. J.”; original titles and explicit retrieval dates remain visible.
+- Diagram 1 shows a representative regional stack inside a boundary explicitly
+  repeated for APAC, EMEA and AMER. Kafka, Spark and reporting exist in each region.
+  All eight diagrams are original conceptual drawings with their foundations cited.
+- Main slides use explicit German component labels. Bibliographic labels follow the
+  configured language; citation formatting defaults to English for API compatibility.
+  ComparisonTable adds optional rowLabel with the unchanged English default.
+- The science loader test fixture now writes to the configured bibliography path,
+  retaining all missing-import/reference/image rejection assertions. It previously
+  assumed the showcase file name and failed on a valid custom bibliography path.
+
+Scope remains a presentation, not an implementation or benchmark of the proposed data
+platform. Physical projector evidence (D-05) remains open as in DEC-16.

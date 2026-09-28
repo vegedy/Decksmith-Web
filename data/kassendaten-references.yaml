@@ -1,0 +1,48 @@
+- id: lyu
+  type: web
+  authors: ['Michael R. Lyu']
+  title: 'Introduction'
+  url: https://www.cse.cuhk.edu.hk/~lyu/book/reliability/introduction.html
+  accessedAt: '2026-09-27'
+- id: kafka
+  type: web
+  authors: ['Apache Kafka']
+  title: 'Geo-Replication (Cross-Cluster Data Mirroring)'
+  url: https://kafka.apache.org/35/operations/geo-replication-cross-cluster-data-mirroring/
+  accessedAt: '2026-09-27'
+- id: spark
+  type: web
+  authors: ['Apache Spark']
+  title: 'Structured Streaming Programming Guide (3.5.6)'
+  url: https://spark.apache.org/docs/3.5.6/structured-streaming-programming-guide.html
+  accessedAt: '2026-09-27'
+- id: cassandra
+  type: web
+  authors: ['Apache Cassandra']
+  title: 'Overview'
+  url: https://cassandra.apache.org/doc/stable/cassandra/architecture/overview.html
+  accessedAt: '2026-09-27'
+- id: airflow
+  type: web
+  authors: ['Apache Airflow']
+  title: 'Architecture Overview'
+  url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html
+  accessedAt: '2026-09-27'
+- id: ibm
+  type: web
+  authors: ['IBM']
+  title: 'OLAP vs. OLTP: Was ist der Unterschied?'
+  url: https://www.ibm.com/de-de/think/topics/olap-vs-oltp
+  accessedAt: '2026-09-27'
+- id: cap
+  type: web
+  authors: ['Seth Gilbert & Nancy A. Lynch']
+  title: 'Perspectives on the CAP Theorem'
+  url: https://groups.csail.mit.edu/tds/papers/Gilbert/Brewer2.pdf
+  accessedAt: '2026-09-27'
+- id: mlflow
+  type: web
+  authors: ['MLflow']
+  title: 'ML Experiment Tracking'
+  url: https://mlflow.org/docs/latest/ml/tracking/
+  accessedAt: '2026-09-27'

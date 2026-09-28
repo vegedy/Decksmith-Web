@@ -339,3 +339,80 @@ assertions stop applying when their examples are removed; new content needs revi
 The external-resource scan cannot prove every computed, unvisited runtime branch.
 Historical upstream dependency advisories are recorded above; no fresh registry
 security audit or dependency migration was part of this run.
+
+## Kassendaten talk implementation · 2026-09-27/28
+
+The authorized content task is implemented: **14 main slides, 900 seconds, four
+appendix slides, eight cited sources and eight original architecture figures**.
+`vortrag.md` is byte-identical to the supplied input. Its SHA-256 before/after is
+`b98a50bb525a8b0c79855447fe64acd9a841afd767af8b7d6cce03dff8245965`.
+The creation stand remains 27 September, when authoring began.
+
+### Automated evidence
+
+- `npm run check` passed in the working tree (exit 0): strict Vue/TypeScript,
+  ESLint, formatting, six test files, resource/source/asset validation, production
+  build, offline browser smoke, interaction, PDF, accessibility, starter/packaging,
+  and all six theme/ratio combinations (three themes × 16:9/4:3).
+- `npm run dev` started both Slidev servers. `SMOKE_URL=http://localhost:3030
+npm run test:foundation` passed against the final development state, including
+  main/appendix navigation. The linked appendix opens outside the main sequence.
+- `npm run export:pdf` (also invoked by the suite) produced
+  `output/weltweite-kassendaten.pdf`: **18 pages**, approximately 16:9,
+  selectable text, embedded Inter and JetBrains Mono. Poppler reports every font
+  embedded, subsetted and Unicode-mapped. The PDF also embeds symbol fallback fonts.
+- All eight full bibliography titles and URLs were matched in extracted PDF text.
+  No unresolved `src:` imports or literal Timeline markup remained. All 14 main
+  slides have notes and positive budgets summing to 900, verified by the new test.
+- Packaging validation successfully generated an 18-image PNG series, a selected
+  single PNG, and the offline emergency package. Output pointers remain in
+  `output/latest-png.json` and the existing emergency-package pointer.
+- Restored the four archived files in `/tmp/kassendaten-showcase` and ran its
+  full `npm run check` to exit 0, including **30-page showcase PDFs** and all six
+  theme/ratio combinations. English defaults, science, interaction and component
+  coverage remain intact. Original showcase slides/assets were not replaced.
+
+Logs are retained under `output/kassendaten-validation/` (`check.log`,
+`showcase-check.log`, `dev.log`, `browser-bounds.log`, `input.sha256`). The isolated
+showcase predates the final content-only spacing edits and content test; the shared
+component/localization code is identical to the tested restored copy.
+
+### Visual evidence and corrections
+
+All **14 main + 4 appendix** browser pages were captured and reviewed, with a separate
+bounds pass on headings, paragraphs, lists, tables, code, figures and sources.
+All **18 PDF pages** were rasterized by Poppler at 1200-pixel width and visually
+inspected. Evidence: `output/kassendaten-browser/`, `output/smoke/` (final main
+browser view) and `output/kassendaten-pdf-review/` (all PDF pages and extracted text).
+Titles, arrows, region boundary, clean-topic labels, German text, sources and footer
+spacing are readable in these outputs. The figures list and literature pages fit.
+Final figure 1 explicitly shows one repeated regional stack, avoiding a misleading
+shared global ingestion cluster. PDF page numbering includes the appendix (1–18);
+browser navigation counts the main deck (1–14) and appendix (1–4) separately.
+
+Visual review caught and repaired source/footer collisions, adjacent component markup
+rendering as literal Timeline text, and the appendix formatter changing Slidev
+separators. The appendix now uses a single stable entry pointing to an imported
+slide bundle under `slides/`; no extra global formatting exclusion was needed.
+The return link was moved to the first appendix page to satisfy navigation checks.
+
+The in-app browser reported no available browser, so the project's local Chromium
+workflow was used. Sandbox-blocked local ports/Poppler subprocesses were rerun with
+explicit execution approval. An overlapping standalone PNG export was invalidated
+by Vite reloads during emergency packaging; the suite's sequential PNG export
+succeeded, and standalone export was rerun after the suite. No validation was disabled.
+
+### Remaining external acceptance
+
+D-05 physical projector readability remains open. The absent assignment sheet and
+examination guide prevent formal rubric verification. The proposed architecture's
+latency, availability, loss, retention and scaling assumptions require actual load,
+failure and recovery tests; this deck provides no operational measurement evidence.
+
+### Final bibliography polish · 2026-09-28
+
+Short citations now have a visible separator space. Full reference titles receive a
+terminal period only when the original title has no terminal punctuation. This leaves
+the IBM question mark intact. `npm run check` passed again (exit 0), including all six
+theme/ratio variants. Browser slide 4 and PDF bibliography page 16 were inspected after
+the edit. The latest complete log is `output/kassendaten-validation/check.log`.

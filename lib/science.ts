@@ -15,5 +15,5 @@ export function citation(
   const ids = [...new Set([...manifest.used, ...manifest.assets])]
   const number = ids.indexOf(id) + 1
   if (!number) throw new Error(`Reference not declared in deck: ${id}`)
-  return formatCitation(reference(id), style, number)
+  return formatCitation(reference(id), style, number, deck.meta.language)
 }

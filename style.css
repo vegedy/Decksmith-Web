@@ -13,3 +13,5 @@
 
 @import './theme/variants/academic-dark.css';
 @import './theme/variants/minimal-print.css';
+
+@import './theme/kassendaten.css';

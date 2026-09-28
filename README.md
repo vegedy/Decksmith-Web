@@ -4,6 +4,49 @@ A local Slidev framework for technical talks: Markdown, Vue 3, strict TypeScript
 scientific components, central citations, three themes, reusable visualizations,
 controlled interaction, offline hosting, PDF and PNG export, and emergency packaging.
 
+## Aktueller Vortrag: Weltweite Kassendaten
+
+Das Hauptdeck enthält **14 Folien / 15 Minuten** für Benito Zenz,
+Aufgabenstellung 1. `slides/kassendaten/` enthält Folien, Sprechernotizen und
+`timeBudget` in Sekunden. `vortrag.md` bleibt bytegenau als Eingabetext erhalten
+und ist gezielt von Prettier ausgenommen. Fachliche Präzisierungen gegenüber dem
+Sprechtext stehen in den Notizen und DEC-17. Der Stand 27.09.2026 ist kein Vortragstermin.
+
+- Konfiguration: `deck.config.ts`; Bibliografie: `data/kassendaten-references.yaml`.
+- Hauptdeck: `http://localhost:3030`; Quellenanhang: `http://localhost:3031`.
+  Die Schlussfolie verlinkt den Anhang, der separat von der linearen Navigation bleibt.
+- `npm run export:pdf`: `output/weltweite-kassendaten.pdf`, einschließlich
+  drei Literaturseiten (höchstens drei Belege je Seite) und Abbildungsübersicht.
+- `npm run export:png`: Bildserie inklusive Anhang; `output/latest-png.json`
+  nennt den aktuellen Ausgabeordner. `npm run build` erzeugt `dist/` und `dist/appendix/`.
+- Vortragsspezifische Gestaltung liegt gekapselt in `theme/kassendaten.css`.
+  Keine zusätzlichen Abhängigkeiten und keine externen Laufzeitressourcen.
+
+### Showcase wiederherstellen
+
+Die bisherigen Folien unter `slides/`, Assets und `data/references.yaml` bleiben
+bestehen. Die vier gesicherten Einstiegs-/Konfigurationsdateien liegen unter
+`examples/showcase/`. Die Konfiguration trägt absichtlich `.ts.txt`, damit die
+Typprüfung keine relativen Imports aus dem Sicherungsordner auflöst.
+Am besten in einer separaten Kopie arbeiten (Zielverzeichnis muss neu sein):
+
+```sh
+npm run new:deck -- --name showcase-review --output /tmp/showcase-review
+cd /tmp/showcase-review
+cp examples/showcase/slides.md slides.md
+cp examples/showcase/appendix.md appendix.md
+cp examples/showcase/deck.config.ts.txt deck.config.ts
+cp examples/showcase/references.yaml data/references.yaml
+npm install
+npm run check
+npm run dev
+```
+
+Eine Wiederherstellung im Hauptverzeichnis ersetzt das aktuelle Deck. Der
+Starter kopiert jeweils das aktive Deck; die Showcase-Sicherung ist weiterhin enthalten.
+Aufgabenstellung und Prüfungsleitfaden fehlen. Formale Passung, physische
+Beamerlesbarkeit und die tatsächlichen Leistungsziele der Architektur bleiben offen.
+
 ## Start on Linux
 
 Use Node **22.12 or newer** (`.nvmrc`) and npm. Install dependencies once with network
@@ -247,19 +290,19 @@ Data types live in `types/visualization.ts`. Components accept plain data, never
 fetch resources, and render semantic HTML or SVG. Keep labels short and split dense
 data across slides; the smoke checks reject showcase overflow.
 
-| Component             | Required props                                                                                                     | Optional props / behavior                                                                                                                                                                                                                                                                                                                                                                     |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MetricCard`          | `label`, `value: string \| number`, `interpretation`                                                               | `unit`, `trend` are visible text, not color-only indicators.                                                                                                                                                                                                                                                                                                                                  |
-| `ComparisonTable`     | `caption`, `columns: { key, label }[]`, `rows: { label, values: Record<string, string \| number> }[]`              | Missing cells show an em dash; headers use semantic scopes.                                                                                                                                                                                                                                                                                                                                   |
-| `PipelineDiagram`     | `label`, `steps: { id, label, detail? }[]`                                                                         | Ordered HTML nodes and directional connectors.                                                                                                                                                                                                                                                                                                                                                |
-| `ArchitectureDiagram` | `label`, `nodes: { id, label, detail?, x, y }[]`, `edges: { from, to, label }[]`                                   | `boundaries: { id, label, x, y, width, height }[] = []`, `legend`, `width = 800`, `height = 260`. Coordinates are SVG units; nodes are 120×46 centered at x/y. Arrange nodes to leave room for edge labels; unknown endpoints fail. Dashed labeled rectangles denote trust boundaries.                                                                                                        |
-| `Timeline`            | `label`, `events: { id, date, label, detail? }[]`                                                                  | Dates are display strings; order follows input.                                                                                                                                                                                                                                                                                                                                               |
-| `ProcessSteps`        | `label`, `steps: { id, label, detail? }[]`                                                                         | `sequential = false`, `startAt = 1`; sequential mode uses native Slidev clicks.                                                                                                                                                                                                                                                                                                               |
-| `Chart`               | `type: 'bar' \| 'line' \| 'scatter' \| 'radar'`, `title`, `series: { name, points: { x, y, label, detail? }[] }[]` | `xLabel`, `yLabel`, `details = false`. Finite values required. Line/scatter use numeric x; bars follow input order, support negative values and a zero baseline. Radar requires matching labels/order, at least three nonnegative axes, and uses a shared zero-based scale. SVG labels/legends persist in PDF; optional native tooltips and a keyboard-accessible data table supplement them. |
-| `ConfusionMatrix`     | `caption`, `labels: string[]`, `values: number[][]`                                                                | `details = true` adds native cell tooltips. Matrix must be square, finite, nonnegative; rows are actual, columns predicted. Counts, axis labels and shade legend remain visible.                                                                                                                                                                                                              |
-| `QrLink`              | `href`, `label`                                                                                                    | Absolute HTTP(S)/mailto URL; generates SVG locally with a four-module quiet zone. Human-readable URL is always included. Opening the link may require internet; rendering never does.                                                                                                                                                                                                         |
-| `InteractiveReveal`   | Default slot                                                                                                       | `at = 1` (absolute positive Slidev click), `motion = 'fade'`, `static = false`, `controls = true`. Reset steps returns the whole slide to its native `clicksStart`.                                                                                                                                                                                                                           |
-| `ImageCompare`        | `before`, `after`, `beforeAlt`, `afterAlt`, `caption`                                                              | `beforeLabel = 'Before'`, `afterLabel = 'After'`, `initial = 50` (clamped to 0–100), `static = false`. Paths must be literal `/images/...` assets in Markdown. Both images should use the same aspect ratio. Keyboard slider and Reset comparison; PDF/static shows both complete images side by side.                                                                                        |
+| Component             | Required props                                                                                                                              | Optional props / behavior                                                                                                                                                                                                                                                                                                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MetricCard`          | `label`, `value: string \| number`, `interpretation`                                                                                        | `unit`, `trend` are visible text, not color-only indicators.                                                                                                                                                                                                                                                                                                                                  |
+| `ComparisonTable`     | `caption`, optional `rowLabel` (default `Item`), `columns: { key, label }[]`, `rows: { label, values: Record<string, string \| number> }[]` | Missing cells show an em dash; headers use semantic scopes.                                                                                                                                                                                                                                                                                                                                   |
+| `PipelineDiagram`     | `label`, `steps: { id, label, detail? }[]`                                                                                                  | Ordered HTML nodes and directional connectors.                                                                                                                                                                                                                                                                                                                                                |
+| `ArchitectureDiagram` | `label`, `nodes: { id, label, detail?, x, y }[]`, `edges: { from, to, label }[]`                                                            | `boundaries: { id, label, x, y, width, height }[] = []`, `legend`, `width = 800`, `height = 260`. Coordinates are SVG units; nodes are 120×46 centered at x/y. Arrange nodes to leave room for edge labels; unknown endpoints fail. Dashed labeled rectangles denote trust boundaries.                                                                                                        |
+| `Timeline`            | `label`, `events: { id, date, label, detail? }[]`                                                                                           | Dates are display strings; order follows input.                                                                                                                                                                                                                                                                                                                                               |
+| `ProcessSteps`        | `label`, `steps: { id, label, detail? }[]`                                                                                                  | `sequential = false`, `startAt = 1`; sequential mode uses native Slidev clicks.                                                                                                                                                                                                                                                                                                               |
+| `Chart`               | `type: 'bar' \| 'line' \| 'scatter' \| 'radar'`, `title`, `series: { name, points: { x, y, label, detail? }[] }[]`                          | `xLabel`, `yLabel`, `details = false`. Finite values required. Line/scatter use numeric x; bars follow input order, support negative values and a zero baseline. Radar requires matching labels/order, at least three nonnegative axes, and uses a shared zero-based scale. SVG labels/legends persist in PDF; optional native tooltips and a keyboard-accessible data table supplement them. |
+| `ConfusionMatrix`     | `caption`, `labels: string[]`, `values: number[][]`                                                                                         | `details = true` adds native cell tooltips. Matrix must be square, finite, nonnegative; rows are actual, columns predicted. Counts, axis labels and shade legend remain visible.                                                                                                                                                                                                              |
+| `QrLink`              | `href`, `label`                                                                                                                             | Absolute HTTP(S)/mailto URL; generates SVG locally with a four-module quiet zone. Human-readable URL is always included. Opening the link may require internet; rendering never does.                                                                                                                                                                                                         |
+| `InteractiveReveal`   | Default slot                                                                                                                                | `at = 1` (absolute positive Slidev click), `motion = 'fade'`, `static = false`, `controls = true`. Reset steps returns the whole slide to its native `clicksStart`.                                                                                                                                                                                                                           |
+| `ImageCompare`        | `before`, `after`, `beforeAlt`, `afterAlt`, `caption`                                                                                       | `beforeLabel = 'Before'`, `afterLabel = 'After'`, `initial = 50` (clamped to 0–100), `static = false`. Paths must be literal `/images/...` assets in Markdown. Both images should use the same aspect ratio. Keyboard slider and Reset comparison; PDF/static shows both complete images side by side.                                                                                        |
 
 Example (blank lines allow Markdown inside a slot):
 
@@ -428,3 +471,8 @@ Author-specific interactive components require their own checks and visual revie
 ## License
 
 Decksmith Web is licensed under the [MIT License](LICENSE).
+
+Bibliographic UI labels follow `meta.language`: German uses “o. J.”, “Abgerufen am”
+and “Lizenz”; English retains “n.d.”, “Accessed” and “License”. Original reference
+titles are preserved. `formatCitation` accepts an optional fourth language argument
+(default `en`); deck citations pass the configured language.
