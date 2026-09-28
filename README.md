@@ -16,8 +16,9 @@ zu einem zentralen Data Lake und ML-Pipelines. Zuverlässigkeit, Skalierbarkeit,
 Wartbarkeit und die Grenzen der angestrebten Latenz werden dabei eingeordnet.
 
 Das Hauptdeck enthält **14 Folien / 15 Minuten**. `slides/kassendaten/` enthält Folien, Sprechernotizen und
-`timeBudget` in Sekunden. `vortrag.md` bleibt bytegenau als Eingabetext erhalten
-und ist gezielt von Prettier ausgenommen. Fachliche Präzisierungen gegenüber dem
+`timeBudget` in Sekunden. `vortrag.md` enthält den ursprünglichen Sprechtext mit
+eingefügten Folienwechsel-Markern; der Wortlaut ist unverändert. Die Datei ist
+gezielt von Prettier ausgenommen. Fachliche Präzisierungen gegenüber dem
 Sprechtext stehen in den Notizen und DEC-17. Der Stand 27.09.2026 ist kein Vortragstermin.
 Die Hauptfolien bauen Kennzahlen, Verarbeitungsschritte, Tabellenzeilen und
 Schlussfolgerungen mit Slidev-Klicks auf. Rechts-/Linkspfeil gehen vor und zurück;

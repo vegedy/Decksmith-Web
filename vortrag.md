@@ -2,11 +2,15 @@
 
 ## Einleitung
 
+**▶ Folie 01 · Weltweite Kassendaten**
+
 Guten Tag, mein Name ist Benito Zenz und ich bearbeite Aufgabenstellung 1.
 
 Unser heutiges Ziel ist der Entwurf einer Datenarchitektur, die weltweit
 anfallende Kassendaten in Echtzeit für lokale Berichte in den Filialen und auch
 weltweit periodisch für Nachfrageprognosen bereitstellt.
+
+**▶ Folie 02 · Die Größenordnung bestimmt den Entwurf**
 
 Weltweit bedeutet, dass wir von etwa 10.000 Filialen ausgehen können, die
 jeweils mehrere Kassen zeitgleich im Betrieb haben können. So könnten zu
@@ -18,6 +22,8 @@ sagen wir p99 < 10 s bei einer Verfügbarkeit von 99,9 %. Der Verlust verlorener
 Events soll gegen 0 gehen.
 
 ## Grundprinzipien
+
+**▶ Folie 03 · Zuverlässig, skalierbar und wartbar**
 
 Wir wollen unser System also zuverlässig, skalierbar und wartbar gestalten. Ich
 möchte kurz erklären, was damit gemeint ist.
@@ -37,12 +43,16 @@ viel Arbeit sparen.
 
 ## Architekturüberblick
 
+**▶ Folie 04 · Ein Ereignisstrom, zwei Auswertungswege**
+
 Sehen wir uns an, wie wir eine solche Architektur gestalten können.
 
 Als Quelle der Wahrheit verwenden wir einen Apache Kafka Stream, aus dem sowohl
 die Echtzeit-Filialberichte als auch die Batch-Abfragen für die
 Nachfrageprognosen gezogen werden. Jede Filiale hat einen Kafka-Producer, der an
 einen regionalen Kafka-Cluster streamt.
+
+**▶ Folie 05 · Edge-Agent und lokaler Puffer**
 
 Der Kafka-Producer in jeder Filiale ist ein sogenannter Edge-Agent. Das ist ein
 leichtgewichtiger Prozess, der lokal auf einem Filial-Rechner oder direkt an der
@@ -77,13 +87,19 @@ gesammelt und für die ML-Pipelines vorbereitet.
 
 Ich möchte diese beiden Abläufe technisch genauer beschreiben:
 
+**▶ Folie 06 · Spark bereinigt regional**
+
 Für die Echtzeit-Verarbeitung werden vom regionalen Kafka-Cluster die Daten
 mittels Spark Structured Streaming geprüft, Duplikate entfernt, Kundenkarten-IDs
 pseudonymisiert und aggregiert.
 
 Spark Structured Streaming prüft, bereinigt und aggregiert die Daten. Die
 bereinigten und pseudonymisierten Daten werden zurück in den regionalen
-Kafka-Cluster nach `pos.transactions.clean` geschrieben. Dann müssen die
+Kafka-Cluster nach `pos.transactions.clean` geschrieben.
+
+**▶ Folie 07 · Aggregate für Filialberichte**
+
+Dann müssen die
 Zusammenfassungen aber auch für die Filialleitung abrufbar sein. Dafür schreibt
 Spark die fertigen Aggregate kontinuierlich in Apache Cassandra.
 
@@ -94,12 +110,16 @@ ruft die Daten dann über eine Reporting-API ab, die die Kennzahlen aus
 Cassandra liest und im Dashboard anzeigt. Die Latenz vom Kassiervorgang bis zur
 Anzeige liegt bei bestehender Netzwerk-Verbindung bei etwa 5–10 Sekunden.
 
+**▶ Folie 08 · Pseudonymisierten Clean-Strom replizieren**
+
 Parallel zum Echtzeitpfad läuft der Batchpfad. Dafür nutzen wir nicht die
 Rohdaten, sondern das bereits bereinigte und pseudonymisierte Topic, das Spark
 im Echtzeitpfad erzeugt hat. Spark hat die Daten nämlich in das Topic
 `pos.transactions.clean` zurückgeschrieben. Mit Kafka MirrorMaker 2 wird dieses
 Topic dann asynchron in den zentralen Kafka-Cluster repliziert. So stellen wir
 sicher, dass nur pseudonymisierte Daten die Region verlassen.
+
+**▶ Folie 09 · Nächtliche Prognose-Features**
 
 Vom zentralen Kafka-Cluster werden die Daten über Kafka Connect in den Data Lake
 geschrieben. Da nutzen wir einen S3-Objektspeicher im Parquet-Format. Der Data
@@ -115,6 +135,8 @@ in Jupyter und trainieren ihre Nachfrageprognose-Modelle. Das Training läuft in
 Kubeflow-Pipelines ab, MLflow versioniert die Modelle. So ist jeder
 Trainingsschritt reproduzierbar. Optional können die fertigen Prognosen über ein
 Kafka-Topic zurück an die Filialen gehen.
+
+**▶ Folie 10 · OLTP und OLAP trennen**
 
 An welchen Stellen finden nun OLTP und OLAP statt? OLTP steht für "Online
 Transactional Processing". An den Kassen werden einzelne Verkäufe zuverlässig
@@ -137,6 +159,8 @@ Kassiervorgang entkoppelt.
 
 ## Prinzipien in der Architektur
 
+**▶ Folie 11 · Asynchrone Replikation und Datenstände**
+
 Nach dem CAP-Theorem kann ein verteilter Speicher nur zwei der drei
 Eigenschaften Konsistenz (C), Verfügbarkeit (A) und Ausfalltoleranz (P)
 garantieren. Da die Kassen nicht warten können, haben wir uns in unserer
@@ -145,6 +169,8 @@ Das ist daran erkennbar, dass die Filialen stets nur in ihre Region schreiben
 und es keine globalen, synchronen Transaktionen gibt. Die Synchronisation in die
 zentrale Analystics-Platform findet asynchron statt, daher handelt es sich um
 evantual consistency.
+
+**▶ Folie 12 · Betriebsmaßnahmen und Nachweise**
 
 Die geplante Architektur ist sowohl zuverlässig als auch skalierbar und wartbar.
 
@@ -165,6 +191,8 @@ Microservices laufen in Containern und werden mittels CI/CD automatisiert
 ausgerollt. Und zudem monitoren wir Fehlerraten und Latenz-Perzentile.
 
 ## Zukunftstrends
+
+**▶ Folie 13 · Neue Anwendungen am Ereignisstrom**
 
 Ein aktueller Trend im Data Engineering ist die Zusammenführung von Stream- und
 Batch-Verarbeitung zu einem einheitlichen Modell, das nennt man dann
@@ -188,6 +216,8 @@ dem nichts im Weg.
 
 ## Fazit
 
+**▶ Folie 14 · Fazit und nächste Nachweise**
+
 Was leistet dieser Entwurf also? Er entkoppelt den Kassiervorgang von der
 Analyse: Die Filialen erfassen Ereignisse lokal, regionale Datenpfade berechnen
 zeitnahe Kennzahlen, und ein separater Batchpfad stellt bereinigte Daten für die
@@ -201,7 +231,7 @@ Verbindungsstörungen oder verspäteten Ereignissen vorläufig sein können und 
 Betrieb mehrerer regionaler Komponenten sorgfältig abgesichert werden muss.
 
 Mein Ergebnis ist deshalb kein Versprechen absoluter Echtzeit, sondern ein
-begründeter Kompromiss: geringe Latenz für die Filialen, getrennte analytische
+Kompromiss: geringe Latenz für die Filialen, getrennte analytische
 Verarbeitung und eine Architektur, die sich für neue Anforderungen
 weiterentwickeln lässt. Ob die gesetzten Ziele tatsächlich erreicht werden,
 müssten anschließend Last- und Ausfalltests zeigen.

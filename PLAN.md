@@ -258,6 +258,7 @@ architecture load/failure/recovery tests. These are not claims of this presentat
 
 **Presentation pacing revision (2026-09-28):** Native Slidev click steps now reveal
 metrics, process steps, table rows and conclusions progressively across the active
-talk. The 14-slide / 900-second structure and the preserved speech input remain.
+talk. The 14-slide / 900-second structure remains; the speech now has explicit
+slide-change cues without changes to its spoken words.
 Build and static checks pass; browser/PDF verification requires Chromium, which is
 unavailable in the current environment (the Playwright download was blocked).

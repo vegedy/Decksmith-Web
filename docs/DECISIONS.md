@@ -353,6 +353,7 @@ with the existing speaking order. `PipelineDiagram.stepwise` is an optional gene
 prop; the first step stays visible and each following step uses Slidev's click state.
 The default component state remains fully visible in existing decks. Print/PDF/PNG
 retain all content in the final state. No autoplay or extra motion is introduced, so
-reduced-motion users can follow the same sequence. The original `vortrag.md` remains
-unchanged. Browser and export visual evidence must be repeated when Chromium is
+reduced-motion users can follow the same sequence. The speech wording is preserved;
+`vortrag.md` now has visible slide-change cues before each slide's speaking segment.
+Browser and export visual evidence must be repeated when Chromium is
 available; the current environment blocks its installation.

@@ -429,3 +429,10 @@ PDF export remain unverified in this run: Chromium is absent and
 `npx playwright install chromium` was denied by the network with HTTP 403.
 Repeat the full check, live click/reverse review and PDF final-state inspection in
 an environment with a TypeScript-enabled Node build and Chromium before presenting.
+
+### Speech slide-change cues · 2026-09-28
+
+`vortrag.md` now marks the transition to each of the 14 main slides. The cue for
+slide 7 splits one paragraph after the regional clean-topic output; the spoken
+wording is otherwise untouched. The earlier byte-for-byte SHA-256 comparison above
+describes the original talk implementation before this authorized annotation.
