@@ -19,7 +19,7 @@ die wir verarbeiten wollen.
 
 Dabei sollen die Dashboards für die lokalen Berichte möglichst aktuell sein,
 sagen wir p99 < 10 s bei einer Verfügbarkeit von 99,9 %. Der Verlust von
-Events soll gegen 0 gehen. Das sind Entwurfsziele, keine gemessenen Werte.
+Events soll gegen 0 gehen. Das sind aber erstmal nur unsere Entwurfsziele.
 
 ## Grundprinzipien
 
@@ -73,9 +73,9 @@ Technologie bietet sich dabei Kafka-Producer mit lokaler Datei-Queue an.
 
 **▶ Folie 06 · Spark bereinigt regional**
 
-Ich möchte diese beiden Abläufe technisch genauer beschreiben:
+Ich möchte die regionalen und zentralen Abläufe technisch genauer beschreiben:
 
-Der Echtzeit-Pfad verarbeitet die Ereignisse, sobald sie ankommen. Spark
+Der regionale Pfad ist ein Echtzeit-Pfad und verarbeitet die Ereignisse, sobald sie ankommen. Spark
 Structured Streaming prüft die Daten aus dem regionalen Kafka-Cluster,
 entfernt Duplikate und pseudonymisiert Kundenkarten-IDs. Die bereinigten,
 pseudonymisierten Ereignisse schreibt Spark in das regionale Topic
@@ -95,7 +95,7 @@ optimiert ist. Das ist genau das, was ein Dashboard braucht. Die Filialleitung
 ruft die Daten dann über eine Reporting-API ab, die die Kennzahlen aus
 Cassandra liest und im Dashboard anzeigt. Die Latenz vom Kassiervorgang bis zur
 Anzeige soll bei bestehender Netzwerk-Verbindung für 99 Prozent der betrachteten
-Ereignisse unter zehn Sekunden liegen. Das muss später gemessen werden.
+Ereignisse unter zehn Sekunden liegen.
 
 **▶ Folie 08 · Pseudonymisierten Clean-Strom replizieren**
 
@@ -104,7 +104,7 @@ keine Rohdaten, sondern das bereinigte und pseudonymisierte Topic
 `pos.transactions.clean` aus dem Echtzeitpfad. Kafka MirrorMaker 2 repliziert
 dieses Topic asynchron in den zentralen Kafka-Cluster. Wir beschränken die
 Replikation auf pseudonymisierte Clean-Topics, damit keine Rohdaten die Region
-verlassen. Diese Regel müssen Topic-Filter und Zugriffsrechte absichern.
+verlassen.
 
 **▶ Folie 09 · Vom Ereignisstrom zur Nachfrageprognose**
 
@@ -151,15 +151,14 @@ Kassiervorgang entkoppelt.
 
 Das CAP-Theorem beschreibt einen Konflikt während einer Netzpartition: Ein
 verteilter Speicher kann dann nicht gleichzeitig starke Konsistenz und
-Verfügbarkeit für dieselbe Operation garantieren. Es ist keine pauschale Wahl
-von zwei Eigenschaften für unsere gesamte Architektur.
+Verfügbarkeit für dieselbe Operation garantieren.
 
 Die Filialen schreiben in ihre Region; globale synchrone Transaktionen sind
 nicht Teil dieses Entwurfs. Das Clean-Topic wird asynchron zur zentralen
 Analyseplattform repliziert. Deshalb können der regionale Bericht und der
 zentrale Datenstand zeitweise voneinander abweichen. Nach erfolgreicher
-Nachlieferung können sie sich wieder annähern. Die Garantien der einzelnen
-Speicher und Operationen müssen wir gesondert prüfen.
+Nachlieferung können sie sich wieder annähern. Wir haben hier also eventual
+consistency.
 
 **▶ Folie 12 · Betriebsmaßnahmen für die Ziele**
 
@@ -168,8 +167,7 @@ Die geplante Architektur soll zuverlässig, skalierbar und wartbar sein.
 Für Zuverlässigkeit planen wir in jeder Region drei Kafka-Broker und einen
 Replikationsfaktor von drei. Der lokale Puffer des Edge-Agents kann
 Verbindungsunterbrechungen überbrücken, solange seine Kapazität reicht. Kafka
-soll die Ereignisse sieben Tage und der Data Lake zwölf Monate vorhalten. Das
-sind Entwurfsannahmen, noch keine Garantie gegen Datenverlust.
+soll die Ereignisse sieben Tage und der Data Lake zwölf Monate vorhalten.
 
 Die Skalierbarkeit wird insbesondere durch die horizontale Skalierung über
 Kafka-Partitionen und Consumer-Gruppen ermöglicht. Dass die Regionen je
@@ -197,12 +195,11 @@ Consumer-Gruppe an Kafka an.
 
 Der Betrieb ist cloud-nativ gehalten, ein weiterer Trend im Data Engineering und
 der Software Entwicklung. Kafka läuft im KRaft-Modus ohne ZooKeeper. Geeignete
-Komponenten könnten als Managed Services in der Cloud laufen; ob das den
-Betriebsaufwand senkt, hängt von der konkreten Umsetzung ab.
+Komponenten könnten als Managed Services in der Cloud laufen.
 
 Die Verbindung von Datenverarbeitung und Modellbetrieb nennen wir MLOps. Die
 genannten Kubeflow-Pipelines und MLflow unterstützen diesen Ansatz; für einen
-reproduzierbaren Betrieb brauchen wir zusätzlich versionierte Daten, Code und
+reproduzierbaren Betrieb brauchen wir dann zusätzlich noch versionierte Daten, Code und
 Umgebungen.
 
 ## Fazit
@@ -226,3 +223,8 @@ Kompromiss: geringe Latenz für die Filialen, getrennte analytische
 Verarbeitung und eine Architektur, die sich für neue Anforderungen
 weiterentwickeln lässt. Ob die gesetzten Ziele tatsächlich erreicht werden,
 müssten anschließend Last-, Ausfall- und Wiederanlauftests zeigen.
+
+Weitere Informationen bezüglich meiner Quellen finden Sie im Anhang.
+
+Ich bedanke mich sehr für Ihre Zeit und wünsche Ihnen nun einen angenehmen Tag.
+
