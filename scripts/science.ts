@@ -27,12 +27,15 @@ export function parseReferences(input: string): ReferenceEntry[] {
       )
     )
       throw new Error(`Invalid reference: ${r.id}`)
-    if (
-      r.authors !== undefined &&
-      (!Array.isArray(r.authors) ||
-        !r.authors.every((a: unknown) => typeof a === 'string' && a.trim()))
-    )
-      throw new Error(`Invalid authors: ${r.id}`)
+    for (const key of ['authors', 'editors'])
+      if (
+        r[key] !== undefined &&
+        (!Array.isArray(r[key]) ||
+          !r[key].every(
+            (name: unknown) => typeof name === 'string' && name.trim(),
+          ))
+      )
+        throw new Error(`Invalid ${key}: ${r.id}`)
     if (
       r.year !== undefined &&
       (typeof r.year !== 'number' || !Number.isInteger(r.year))

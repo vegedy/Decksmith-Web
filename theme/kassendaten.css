@@ -105,6 +105,15 @@
   .kassendaten .kd-paths p {
     margin: 0;
   }
+  .kd-conclusion .kd-paths ul {
+    margin-bottom: 0;
+  }
+  .kd-conclusion .kd-paths li {
+    margin-bottom: var(--space-1);
+  }
+  .kd-conclusion .kd-paths li:last-child {
+    margin-bottom: 0;
+  }
   .kassendaten .kd-central {
     --color-primary: var(--kd-central);
     color: var(--color-text);

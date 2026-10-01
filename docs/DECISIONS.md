@@ -329,9 +329,11 @@ Interpretations required by the approved plan:
 - CAP refers to the strong-consistency/availability conflict during a network partition.
   The architecture receives no global “AP” label. Successful replay is a precondition
   for eventual convergence; independent components retain their own guarantees.
-- The incomplete “Lyu, 1995” attribution remains unchanged in the input. The accessible
-  Introduction chapter is cited separately without inventing a year. Undated web
-  documents use “o. J.”; original titles and explicit retrieval dates remain visible.
+- The “Lyu, 1995” attribution remains unchanged in the speech input. Lyu's own
+  publication list dates the edited _Handbook of Software Reliability Engineering_
+  to 1996, so the slides cite the book as Lyu (ed.), 1996, with a link to the online
+  edition. Undated web documents use “o. J.”; original titles and explicit retrieval
+  dates remain visible.
 - Diagram 1 shows a representative regional stack inside a boundary explicitly
   repeated for APAC, EMEA and AMER. Kafka, Spark and reporting exist in each region.
   All eight diagrams are original conceptual drawings with their foundations cited.

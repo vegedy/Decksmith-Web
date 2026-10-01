@@ -1,9 +1,11 @@
 - id: lyu
-  type: web
-  authors: ['Michael R. Lyu']
-  title: 'Introduction'
-  url: https://www.cse.cuhk.edu.hk/~lyu/book/reliability/introduction.html
-  accessedAt: '2026-09-27'
+  type: book
+  editors: ['Michael R. Lyu']
+  year: 1996
+  title: 'Handbook of Software Reliability Engineering [Handbuch der Software-Zuverlässigkeitstechnik]'
+  publisher: 'IEEE Computer Society Press und McGraw-Hill Book Company'
+  url: https://www.cse.cuhk.edu.hk/~lyu/book/reliability/
+  accessedAt: '2026-09-30'
 - id: kafka
   type: web
   authors: ['Apache Kafka']

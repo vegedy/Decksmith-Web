@@ -11,6 +11,4 @@ appendix: true
 
 <ReferencesSlide :offset="0" :limit="3" />
 
-<p class="kd-note">„Lyu, 1995“ im Eingabetext ist bibliografisch unvollständig. Hier wird das online zugängliche Kapitel separat belegt.</p>
-
 <p class="kd-note"><DeckLink target="main">Zurück zum Vortrag</DeckLink></p>

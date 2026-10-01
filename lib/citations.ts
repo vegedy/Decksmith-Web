@@ -1,6 +1,6 @@
 import type { CitationStyle, ReferenceEntry } from '../types/science.ts'
 export function authorLabel(entry: ReferenceEntry): string {
-  const names = entry.authors ?? []
+  const names = entry.authors ?? entry.editors ?? []
   if (!names.length) return entry.title
   return names.length > 2 ? `${names[0]} et al.` : names.join(' & ')
 }

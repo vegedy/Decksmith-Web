@@ -40,9 +40,11 @@ const entries = computed(() =>
       "
     >
       <div>
-        {{ entry.authors?.join(', ') }} ({{
-          entry.year ?? (german ? 'o. J.' : 'n.d.')
-        }}).
+        {{ (entry.authors ?? entry.editors)?.join(', ') }}
+        <span v-if="entry.editors && !entry.authors">
+          {{ german ? ' (Hrsg.)' : ' (ed.)' }}
+        </span>
+        ({{ entry.year ?? (german ? 'o. J.' : 'n.d.') }}).
         <strong>
           {{ entry.title }}{{ /[.!?]$/.test(entry.title) ? '' : '.' }}
         </strong>

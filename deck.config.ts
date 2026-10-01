@@ -5,7 +5,12 @@ export default {
     title: 'Weltweite Kassendaten',
     subtitle: 'Lokale Berichte und globale Nachfrageprognosen',
     author: 'Benito Zenz',
-    date: 'Stand: 27.09.2026',
+    date: `Stand: ${new Intl.DateTimeFormat('de-DE', {
+      timeZone: 'Europe/Berlin',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(new Date())}`,
     language: 'de',
     version: '0.1',
   },
@@ -15,7 +20,7 @@ export default {
     showSlideNumbers: true,
     showSourceFooters: true,
     defaultTheme: 'academic-light',
-    footer: 'Benito Zenz · Aufgabenstellung 1',
+    footer: 'Benito Zenz',
     fonts: {
       sans: 'Inter Variable',
       mono: 'JetBrains Mono',

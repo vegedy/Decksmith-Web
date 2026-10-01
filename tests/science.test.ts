@@ -71,6 +71,7 @@ test('reference schema validates duplicates, URLs, metadata and authors', () => 
     '- {id: a, type: web, title: A, url: "javascript:alert(1)"}',
     '- {id: a, type: web, title: A, year: yesterday}',
     '- {id: a, type: web, title: A, authors: [42]}',
+    '- {id: a, type: book, title: A, editors: [42]}',
     '- {id: a, type: web, title: A, license: 42}',
   ])
     assert.throws(() => parseReferences(source))
@@ -82,6 +83,19 @@ test('all citation formats are deterministic', () => {
   assert.equal(
     formatCitation(entry, 'short-footnote', 2),
     '2. A et al., 2024, Example paper',
+  )
+})
+test('edited books use the editor in short citations', () => {
+  const [book] = parseReferences(`
+- id: handbook
+  type: book
+  title: Handbook of Software Reliability Engineering
+  editors: ['Michael R. Lyu']
+  year: 1996
+`)
+  assert.equal(
+    formatCitation(book!, 'author-year', 1),
+    '(Michael R. Lyu, 1996)',
   )
 })
 test('specification math delimiters adapt outside code only', () => {

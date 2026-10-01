@@ -3,6 +3,7 @@ export interface ReferenceEntry {
   id: string
   type: 'article' | 'book' | 'web' | 'dataset' | 'image' | 'software'
   authors?: string[]
+  editors?: string[]
   year?: number
   title: string
   containerTitle?: string
