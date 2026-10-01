@@ -3,7 +3,7 @@ const processes = [
   ['slides.md', '3030'],
   ['appendix.md', '3031'],
 ].map(([entry, port]) =>
-  spawn('node_modules/.bin/slidev', [entry!, '--port', port!], {
+  spawn('node_modules/.bin/slidev', [entry!, '--port', port!, '--remote'], {
     stdio: 'inherit',
   }),
 )

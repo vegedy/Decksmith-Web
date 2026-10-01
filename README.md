@@ -78,6 +78,23 @@ Open <http://localhost:3030>. The same command starts the appendix at
 navigation, click steps, overview and presenter mode. Configuration changes require
 restarting the dev command; Markdown, components and CSS update through Vite HMR.
 
+### Presenter view over the local network
+
+The development commands enable [Slidev remote access](https://sli.dev/features/remote-access)
+and listen on all IPv4 interfaces (`0.0.0.0`). Connect the other device to the same
+local network and use the LAN IP address printed under **remote control** at startup:
+
+- Audience: `http://<server-lan-ip>:3030/`
+- Presenter: `http://<server-lan-ip>:3030/#/presenter/`
+- Appendix presenter: `http://<server-lan-ip>:3031/#/presenter/`
+
+Keep the audience view open on the presentation computer; navigation from the
+presenter device synchronizes through Slidev. The presenter routes use `#/`
+because this deck uses hash routing. Allow incoming TCP ports 3030 and 3031 in
+the computer's firewall if needed. Local-network clients can access slides,
+speaker notes and presentation controls while the server runs; Ctrl+C stops both
+servers.
+
 For repeatable installation use `npm ci` and commit `package-lock.json` when updating
 dependencies. Exact direct versions and the lockfile define the build inputs.
 

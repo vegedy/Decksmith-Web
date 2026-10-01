@@ -389,3 +389,19 @@ Slide text and notes remain summaries rather than a verbatim transcript. Technic
 details too dense for projection stay in notes. The old validation record's
 historical source hashes and prior passing exports do not establish validation
 for this revision.
+
+## DEC-20 — Local-network presenter access (2026-10-01)
+
+At the user's request, all development entry points enable Slidev's native
+`--remote` mode. Slidev binds to `0.0.0.0` and synchronizes presenter navigation
+over its existing WebSocket connection. Both ports (3030 main, 3031 appendix)
+remain fixed. Hash routing requires `/#/presenter/` on the other device.
+This is local-network hosting under A-01; no external service or dependency is
+needed. Development access includes notes and presentation controls for LAN
+clients. README documents URLs and firewall requirements.
+
+Validation: `npm run check` passed. Chromium loaded both presenter views using
+`192.168.178.75` and verified that advancing the main presenter moves the
+localhost audience to slide 2. The main presenter screenshot was visually
+inspected at 1440×900. These checks run on the server computer; physical
+second-device connectivity and router/firewall behavior remain network-specific.

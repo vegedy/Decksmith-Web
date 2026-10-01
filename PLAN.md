@@ -270,3 +270,10 @@ training on slides 8–9. Slides 3, 8, 12 and 13 no longer reveal later material
 Targeted corrections align CAP, Cassandra, latency goals, clean events versus
 aggregates, and training reproducibility with the slides. DEC-19 records the
 new source-of-truth policy; validation evidence is in `docs/VALIDATION.md`.
+
+**Local-network presenter access (2026-10-01):** User-authorized maintenance
+enables native Slidev remote mode for the main and appendix development commands.
+README documents the hash-based presenter URLs and local-network connection.
+DEC-20 records the hosting choice and passing `npm run check`, LAN-address
+Chromium rendering and presenter/audience synchronization. Physical second-device
+connectivity must be confirmed on the user's network.
