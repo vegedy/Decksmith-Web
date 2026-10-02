@@ -1,6 +1,7 @@
 node_modules/
 dist/
 output/
+notes/*.pdf
 .slidev/
 components.d.ts
 *.log

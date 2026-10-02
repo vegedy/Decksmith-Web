@@ -502,6 +502,30 @@ component-mounting test framework. Showcase-specific interaction/PDF assertions 
 conditional on the examples being present; removing examples reduces that coverage.
 Author-specific interactive components require their own checks and visual review.
 
+## Präsentationsnotizen mit Typst
+
+`notes/vortrag.typ` liest den Wortlaut direkt aus `vortrag.md` und setzt ihn als
+nummerierte A4-Präsentationsnotizen. Jede Folie beginnt auf einer neuen Seite;
+die vorhandenen Folienmarkierungen, Kapitelüberschriften und der Quellenlink
+bleiben erhalten. Die Notizen werden separat vom Slidev-Deck erstellt.
+
+Mit lokal installiertem Typst (geprüft mit 0.15.1) im Projektverzeichnis:
+
+```bash
+typst compile --root . notes/vortrag.typ notes/vortrag.pdf
+```
+
+Für laufende Aktualisierung beim Bearbeiten des Vortrags:
+
+```bash
+typst watch --root . notes/vortrag.typ notes/vortrag.pdf
+```
+
+Die Schrift Libertinus Serif ist in Typst enthalten; der Export benötigt keine
+externen Pakete oder Internetverbindung. Die PDF liegt ebenfalls in `notes/`.
+Die Typst-Datei verarbeitet die aktuell verwendeten Markdown-Elemente; neue
+Markdown-Konstrukte benötigen gegebenenfalls eine Anpassung der Umsetzung.
+
 ## License
 
 Decksmith Web is licensed under the [MIT License](LICENSE).

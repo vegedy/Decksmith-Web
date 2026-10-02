@@ -277,3 +277,16 @@ README documents the hash-based presenter URLs and local-network connection.
 DEC-20 records the hosting choice and passing `npm run check`, LAN-address
 Chromium rendering and presenter/audience synchronization. Physical second-device
 connectivity must be confirmed on the user's network.
+
+**Präsentationsnotizen (2026-10-02):** User-authorized Typst notes in
+`notes/vortrag.typ` read `vortrag.md` directly without rewriting the speech.
+The separate A4 PDF uses marked slide changes, a new page for every slide and
+page numbers. Compilation, exact extracted-text comparison and visual PDF
+inspection validate this document; no framework milestone is added.
+
+Validation passed with Typst 0.15.1: `typst compile --root . notes/vortrag.typ
+notes/vortrag.pdf`; Poppler confirms 14 A4 pages and embedded fonts. Extracted
+text matches the complete input after removing Markdown delimiters and normalizing
+whitespace / wrapping at existing hyphens. Every page has its expected slide cue
+and current / total page number. All 14 rendered pages were visually inspected;
+documentation formatting and `git diff --check` pass. `vortrag.md` is unchanged.

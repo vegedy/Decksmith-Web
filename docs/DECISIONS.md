@@ -405,3 +405,18 @@ Validation: `npm run check` passed. Chromium loaded both presenter views using
 localhost audience to slide 2. The main presenter screenshot was visually
 inspected at 1440×900. These checks run on the server computer; physical
 second-device connectivity and router/firewall behavior remain network-specific.
+
+## DEC-21 — Verbatim A4 presentation notes (2026-10-02)
+
+At the user's request, `notes/vortrag.typ` creates a separate Typst document from
+`vortrag.md`. This is an additional print artifact; Slidev continues to own the
+presentation and its exports. Typst is a local CLI prerequisite for these notes,
+not a new npm or runtime dependency. Its bundled Libertinus Serif font requires
+no external packages or network access.
+
+The notes read the input file at compile time and preserve its wording, paragraph
+order, chapter headings, slide cues and source URL. Markdown delimiters become
+formatting; source line wrapping becomes spaces. Every existing slide cue starts
+a new A4 page, with the chapter heading placed after that break. Page numbers
+include the total page count. The current speech fits on 14 pages, one per slide;
+longer future text can continue onto another page. The original speech is unchanged.

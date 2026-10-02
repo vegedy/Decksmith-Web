@@ -122,3 +122,14 @@ This authorized talk adds evidence without changing the historical framework mat
 | A-03, A-04, E-08: retained showcase                 | `examples/showcase/`, unchanged showcase slides/assets, isolated restoration and full suite                                                                                                                                                               |
 | Input fidelity                                      | `/vortrag.md` remains excluded from Prettier and is the talk's content source. Slide-marker alignment moved speech sections and made targeted factual corrections under DEC-19. Historical SHA-256 comparison applies only to the earlier implementation. |
 | Open evidence                                       | D-05 physical projector; missing assignment/guide; operational targets require real platform tests                                                                                                                                                        |
+
+## User-authorized presentation notes (2026-10-02)
+
+This separate document adds no framework requirement IDs.
+
+| Request                                           | Implementation / evidence                                                                                                 |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Typst notes in `notes/`                           | `notes/vortrag.typ`; compile command documented in README                                                                 |
+| Exact wording from `vortrag.md`                   | Direct `read()` at compile time; normalized PDF text compared with the entire Markdown input; input file unchanged        |
+| A4, marked slide changes, breaks at slide changes | Explicit A4 page setup and page break before each cue; 14-page PDF, one slide per page; rendered pages visually inspected |
+| Numbered pages                                    | Centered current / total page counter on all 14 pages                                                                     |
