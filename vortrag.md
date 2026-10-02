@@ -29,8 +29,8 @@ Wir wollen unser System also zuverlässig, skalierbar und wartbar gestalten. Ich
 möchte kurz erklären, was damit gemeint ist.
 
 Zuverlässigkeit ist die Wahrscheinlichkeit, dass eine Software über einen
-bestimmten Zeitraum in einer bestimmten Umgebung fehlerfrei funktioniert (Lyu,
-1995). Wir wollen uns also auf unser Daten-System verlassen können.
+bestimmten Zeitraum in einer bestimmten Umgebung fehlerfrei funktioniert. Wir
+wollen uns also auf unser Daten-System verlassen können.
 
 Skalierbarkeit ist die Fähigkeit einer Anwendung, mit der Zeit zu wachsen oder
 zu schrumpfen und an den Load angepasst effizient zu arbeiten. Das bedeutet, wir
