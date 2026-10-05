@@ -290,3 +290,10 @@ text matches the complete input after removing Markdown delimiters and normalizi
 whitespace / wrapping at existing hyphens. Every page has its expected slide cue
 and current / total page number. All 14 rendered pages were visually inspected;
 documentation formatting and `git diff --check` pass. `vortrag.md` is unchanged.
+
+**A6 notes readability (2026-10-05):** User-authorized maintenance replaces the
+A4 notes layout with native A6, 12-pt body text, 5-mm top/side margins and an
+8-mm bottom margin. Compact heading and paragraph spacing preserve exactly one
+page per slide without changing `vortrag.md`. Typst compilation, 14-page A6
+dimensions, embedded fonts, exact per-slide extracted-text comparison and visual
+inspection of all pages passed. DEC-22 and README record the print settings.

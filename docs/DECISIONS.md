@@ -420,3 +420,17 @@ formatting; source line wrapping becomes spaces. Every existing slide cue starts
 a new A4 page, with the chapter heading placed after that break. Page numbers
 include the total page count. The current speech fits on 14 pages, one per slide;
 longer future text can continue onto another page. The original speech is unchanged.
+
+## DEC-22 — Readable A6 presentation notes (2026-10-05)
+
+The user prints the notes on A6 and requires one page per slide. This supersedes
+DEC-21's A4 format and allowance for continuation pages. Native A6 pages avoid
+halving the original 17-pt body to approximately 8.5 pt during printing. The new
+12-pt body is approximately 41% larger at the intended print size. Top and side
+margins are 5 mm; the bottom margin is 8 mm for the page counter. Compact paragraph
+spacing, leading and headings recover space without changing the speech.
+
+All 14 current slides fit individually. Trials at 12.5 and 13 pt overflowed to
+15 pages; 12 pt preserves the page limit. Future speech changes must be checked
+again for one page per slide; do not truncate wording to force a fit. Print at
+actual size on A6.

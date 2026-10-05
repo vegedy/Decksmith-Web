@@ -127,9 +127,9 @@ This authorized talk adds evidence without changing the historical framework mat
 
 This separate document adds no framework requirement IDs.
 
-| Request                                           | Implementation / evidence                                                                                                 |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Typst notes in `notes/`                           | `notes/vortrag.typ`; compile command documented in README                                                                 |
-| Exact wording from `vortrag.md`                   | Direct `read()` at compile time; normalized PDF text compared with the entire Markdown input; input file unchanged        |
-| A4, marked slide changes, breaks at slide changes | Explicit A4 page setup and page break before each cue; 14-page PDF, one slide per page; rendered pages visually inspected |
-| Numbered pages                                    | Centered current / total page counter on all 14 pages                                                                     |
+| Request                                                        | Implementation / evidence                                                                                                        |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Typst notes in `notes/`                                        | `notes/vortrag.typ`; compile command documented in README                                                                        |
+| Exact wording from `vortrag.md`                                | Direct `read()` at compile time; normalized PDF text compared with the entire Markdown input; input file unchanged               |
+| A6 readability, one page per slide (2026-10-05, supersedes A4) | Native A6, 12-pt body, 5-mm top/side and 8-mm bottom margins; 14-page PDF with exact per-slide text comparison and visual review |
+| Numbered pages                                                 | Centered current / total page counter on all 14 pages                                                                            |

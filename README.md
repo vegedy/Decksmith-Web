@@ -505,7 +505,9 @@ Author-specific interactive components require their own checks and visual revie
 ## Präsentationsnotizen mit Typst
 
 `notes/vortrag.typ` liest den Wortlaut direkt aus `vortrag.md` und setzt ihn als
-nummerierte A4-Präsentationsnotizen. Jede Folie beginnt auf einer neuen Seite;
+nummerierte A6-Präsentationsnotizen mit 12-pt-Fließtext. Die schmalen Ränder
+(oben/seitlich 5 mm, unten 8 mm) und kompakten Abstände halten den aktuellen
+Vortrag auf genau einer Seite je Folie. Jede Folie beginnt auf einer neuen Seite;
 die vorhandenen Folienmarkierungen, Kapitelüberschriften und der Quellenlink
 bleiben erhalten. Die Notizen werden separat vom Slidev-Deck erstellt.
 
@@ -523,6 +525,8 @@ typst watch --root . notes/vortrag.typ notes/vortrag.pdf
 
 Die Schrift Libertinus Serif ist in Typst enthalten; der Export benötigt keine
 externen Pakete oder Internetverbindung. Die PDF liegt ebenfalls in `notes/`.
+Beim Drucken A6 und 100 % / tatsächliche Größe wählen. Nach Textänderungen
+prüfen, dass die PDF weiterhin genau eine Seite pro Folie enthält.
 Die Typst-Datei verarbeitet die aktuell verwendeten Markdown-Elemente; neue
 Markdown-Konstrukte benötigen gegebenenfalls eine Anpassung der Umsetzung.
 
