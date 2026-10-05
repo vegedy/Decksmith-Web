@@ -127,7 +127,7 @@ können die fertigen Prognosen über ein Kafka-Topic zurück an die Filialen geh
 **▶ Folie 10 · OLTP und OLAP trennen**
 
 An welchen Stellen finden nun OLTP und OLAP statt? OLTP steht für "Online
-Transactional Processing". An den Kassen werden einzelne Verkäufe zuverlässig
+Transactional Processing". An den Kassen werden einzelne Verkäufe
 als Geschäftstransaktionen erfasst. Diese operative Verarbeitung soll nicht
 durch Berichte oder Prognosen belastet werden.
 
@@ -143,28 +143,27 @@ steht für "Online Analytical Processing". Spark-Batch-Jobs und die Data
 Scientists untersuchen dort größere historische Datenbestände und erstellen
 Features für die Nachfrageprognose. So bleiben die analytischen Lasten vom
 Kassiervorgang entkoppelt.
-> https://www.ibm.com/de-de/think/topics/olap-vs-oltp
 
 ## Prinzipien in der Architektur
 
 **▶ Folie 11 · Asynchrone Replikation und Datenstände**
 
-Das CAP-Theorem beschreibt einen Konflikt während einer Netzpartition: Ein
-verteilter Speicher kann dann nicht gleichzeitig starke Konsistenz und
+Das CAP-Theorem beschreibt einen Konflikt bei Netzpartitionen: Ein
+verteilter Speicher kann nicht gleichzeitig starke Konsistenz und
 Verfügbarkeit für dieselbe Operation garantieren.
 
-Die Filialen schreiben in ihre Region; globale synchrone Transaktionen sind
+Die Filialen schreiben nur in ihre Region; globale synchrone Transaktionen sind
 nicht Teil dieses Entwurfs. Das Clean-Topic wird asynchron zur zentralen
 Analyseplattform repliziert. Deshalb können der regionale Bericht und der
 zentrale Datenstand zeitweise voneinander abweichen. Nach erfolgreicher
-Nachlieferung können sie sich wieder annähern. Wir haben hier also eventual
+Nachlieferung können sie sich aber wieder annähern. Wir haben hier also eventual
 consistency.
 
 **▶ Folie 12 · Betriebsmaßnahmen für die Ziele**
 
 Die geplante Architektur soll zuverlässig, skalierbar und wartbar sein.
 
-Für Zuverlässigkeit planen wir in jeder Region drei Kafka-Broker und einen
+Für Zuverlässigkeit planen wir in jeder Region drei Kafka-Broker mit einem
 Replikationsfaktor von drei. Der lokale Puffer des Edge-Agents kann
 Verbindungsunterbrechungen überbrücken, solange seine Kapazität reicht. Kafka
 soll die Ereignisse sieben Tage und der Data Lake zwölf Monate vorhalten.
